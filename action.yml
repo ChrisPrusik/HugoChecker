@@ -1,11 +1,11 @@
-name: 'Sample Dotnet Action'
-description: 'sample dotnet based action'
-author: 'Your name or organization here'
+name: Arghul Hugo Checker
+description: Check all the hugo files based on the arghul-hugo-checker.yaml file
+author: Chris Prusik
 inputs:
-  milliseconds:
+  hugo-folder:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: Path to the folder with all hugo files
+    default: 'C:\inetpub\wwwroot'
 runs:
   using: 'node12'
   main: 'index.js'
