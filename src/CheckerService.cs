@@ -25,7 +25,7 @@ public class CheckerService
         await Task.Delay(1000);    
         FinishInformation();
     }
-
+    
     private async Task ReadConfig()
     {
         var fileName = Path.Combine(HugoFolder, "arghul-hugo-checker.yaml");
