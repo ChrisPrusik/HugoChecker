@@ -2,14 +2,16 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>ArghulHugoChecker</RootNamespace>
     <LangVersion>11</LangVersion>
     <Nullable>enable</Nullable>
+    <Company>arghul</Company>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="DotnetActionsToolkit" Version="1.0.11" />
+    <PackageReference Include="YamlDotNet" Version="13.1.1" />
   </ItemGroup>
 
 </Project>
