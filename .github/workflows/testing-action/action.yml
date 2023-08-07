@@ -6,7 +6,7 @@ runs:
       uses: __CUSTOM_ACTION_REPO__@__GITHUB_SHA__
       id: sample
       with:
-        hugo-folder: ${{ vars.GITHUB_WORSPACE }}
+        hugo-folder: ${{ vars.GITHUB_WORSPACE }}/test-hugo
     - name: Test Outputs
       run: |
         if ("${{ steps.sample.outputs.time }}") {
