@@ -6,13 +6,5 @@ runs:
       uses: __CUSTOM_ACTION_REPO__@__GITHUB_SHA__
       id: sample
       with:
-        hugo-folder: /
-    - name: Test Outputs
-      run: |
-        if ("${{ steps.sample.outputs.time }}") {
-          Write-Output "Output Value Found [${{ steps.sample.outputs.time }}]"
-        } else {
-          Write-Error "No output value found"
-          exit 1
-        }
+        hugo-folder: ${{ github.workspace }}/test-hugo
       shell: pwsh
