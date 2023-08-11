@@ -1,6 +1,6 @@
-name: Arghul Hugo Checker
-description: Check all the hugo files based on the arghul-hugo-checker.yaml file
-author: Chris Prusik
+name: HugoChecker
+description: Check all the hugo files based on the hugo-checker.yaml file
+author: Arghul
 inputs:
   hugo-folder:
     required: true

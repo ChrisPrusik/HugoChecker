@@ -10,9 +10,9 @@ public class CheckerService
 {
     private readonly Core core;
 
-    public string HugoFolder => core.GetInput("hugo-folder");
+    private string HugoFolder => core.GetInput("hugo-folder");
     public string HugoConfigFile => Path.Combine(HugoFolder, "config.yaml");
-    public string CheckerConfigFile => Path.Combine(HugoFolder, "arghul-hugo-checker.yaml");
+    public string CheckerConfigFile => Path.Combine(HugoFolder, "hugo-checker.yaml");
     
     public CheckerService(Core core)
     {
