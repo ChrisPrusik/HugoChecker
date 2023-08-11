@@ -13,7 +13,10 @@ public class Program
         var checkerService = new CheckerService(core);
         try
         {
-            await checkerService.Check();
+            if (args.Length > 0)
+                await checkerService.Check(args[0]);
+            else
+                await checkerService.Check();
         }
         catch (Exception ex)
         {

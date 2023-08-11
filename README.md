@@ -13,6 +13,7 @@ Example usage:
 runs:
   steps:
     - name: Check out the Hugo *.md files
+      uses: HugoChecker
       with:
         hugo-folder: ${{ github.workspace }}/test-hugo
 ```

@@ -1,0 +1,43 @@
+title: Test website
+languageCode: en
+languages:
+  en:
+    languageName: ':uk:'
+    params:
+      lead: Super human
+      info: 
+        - Some information
+    menu:
+      main:
+        - name: Why
+          url: why/
+          weight: 1
+        - name: Apps
+          url: apps/
+          weight: 2
+        - name: Blog
+          url: blog/
+          weight: 3
+        - name: Contact 
+          url: contact/
+          weight: 3
+  pl:
+    languageName: ':poland:'
+    params:
+      lead: Super człowiek
+      info: 
+        - Trochę informacji
+    menu:
+      main:
+        - name: Dlaczego
+          url: dlaczego/
+          weight: 1
+        - name: Apki
+          url: apki/
+          weight: 2
+        - name: Blog
+          url: blog/
+          weight: 3
+        - name: Kontakt 
+          url: kontakt/
+          weight: 4
