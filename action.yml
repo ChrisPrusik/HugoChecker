@@ -5,7 +5,7 @@ inputs:
   hugo-folder:
     required: true
     description: Path to the folder with all hugo files
-    default: 'C:\inetpub\wwwroot'
+    default: C:\inetpub\wwwroot
 runs:
   using: 'node12'
   main: 'index.js'

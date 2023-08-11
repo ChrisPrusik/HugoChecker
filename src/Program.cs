@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Threading.Tasks;
 
-namespace ArghulHugoChecker;
+namespace HugoChecker;
 
 public class Program
 {

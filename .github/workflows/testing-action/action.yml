@@ -7,4 +7,3 @@ runs:
       id: sample
       with:
         hugo-folder: ${{ github.workspace }}/test-hugo
-#      shell: pwsh

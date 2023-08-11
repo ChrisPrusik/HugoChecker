@@ -1,0 +1,36 @@
+# HugoCHecker configuration file for this directory
+
+folders-to-check:
+  - content
+  - content/blog
+required-headers:
+  - slug
+  - title
+  - description
+  - author
+  - date
+required:
+  - section:
+    - en:
+      - Personal experience
+      - Existential question
+      - Practice
+    - pl:
+      - Osobiste doÅwiadczenie
+      - Egzystencjalne pytanie
+      - Praktyka
+  - category:
+    - en:
+      - Blog
+      - App
+      - Information
+    - pl:
+      - Blog
+      - Apka
+      - Informacja
+check-file-names: yes
+check-file-language: yes
+translated-newer-than-original: yes
+spellcheck: yes
+original-language: pl
+translated-language: en

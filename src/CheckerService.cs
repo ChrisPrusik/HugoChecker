@@ -2,34 +2,37 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using DotnetActionsToolkit;
-using YamlDotNet;
 
-namespace ArghulHugoChecker;
+namespace HugoChecker;
 
 public class CheckerService
 {
     private readonly Core core;
 
     private string HugoFolder => core.GetInput("hugo-folder");
-    public string HugoConfigFile => Path.Combine(HugoFolder, "config.yaml");
-    public string CheckerConfigFile => Path.Combine(HugoFolder, "hugo-checker.yaml");
+    private string HugoConfigFile => Path.Combine(HugoFolder, "config.yaml");
+    private string CheckerConfigFile => Path.Combine(HugoFolder, "hugo-checker.yaml");
     
     public CheckerService(Core core)
     {
         this.core = core;
+        this.core.
     }
 
     public async Task Check()
     {
         StartInformation();
         CheckInputs();
-        await ReadConfig();
+        var config = await ReadConfig();
         await Task.Delay(1000);    
         FinishInformation();
     }
     
-    private async Task ReadConfig()
+    private async Task<HugoCheckerConfig> ReadConfig()
     {
+        var config = new HugoCheckerConfig();
+
+        return config;
     }
     
     private void CheckInputs()
@@ -49,7 +52,7 @@ public class CheckerService
 
     private void StartInformation()
     {
-        core.Info($"ArghulHugoChecker hugo-folder: '{HugoFolder}'");
+        core.Info($"HugoChecker hugo-folder: '{HugoFolder}'");
     }
 
     private void FinishInformation()

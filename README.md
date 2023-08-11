@@ -1,28 +1,103 @@
-# .Net Action Template
-This repo is a template you can use to write your own custom GitHub Action using .Net/C#.
+# HugoChecker action
 
-You can see an example of an action created using this template here: [send-workflow-notifications](https://github.com/OctoGeeks/send-workflow-notifications)
+This GitHub Ation will check all markdown files in the [Hugo](https://gohugo.io) project for their correctness based on the configuration file.
 
-# Why this and not a docker-based action
-The standard advice is if you want to write an action in a language other than the few with built-in support, is to use a docker-based action, where you can install all the runtime dependencies your language/tech stack requires.
+* Spellcheck.
+* Checking whether the correct language versions are contained in the headers and text based on the file name.
+* Checking if all language versions of markdown files are in the folder based on project configuration.
+* And [more...]()
 
-For a .Net based action you could certainly go docker-based, but this repo uses a different approach that doesn't involve docker. Because you can compile a .Net app into a self-contained binary, you can run it without docker and not impose any dependencies on the consumers of your action. Simply include the binaries in the repo, and invoke them directly from the action manifest.
+Example usage:
 
-The has a few potential benefits vs a docker-based .Net action:
+```yaml
+runs:
+  steps:
+    - name: Check out the Hugo *.md files
+      with:
+        hugo-folder: ${{ github.workspace }}/test-hugo
+```
+The input `hugo-folder` is the root folder of the Hugo project.
 
-1. No need to include the extra complexity of docker. If you use docker often this may not be a big deal, but if you're not familiar with docker this may be a large benefit.
+> **NOTE:** The current version of the action operates only on yaml configurations.
 
-2. Sometimes people use self-hosted runners that don't have docker available in their environment, and can't use docker based actions.
+## Configuration files
 
-3. Docker-based actions can only run on linux-based runners, whereas a .Net self-contained app can be run on linux + windows + mac.
+The root folder should also contain this action configuration file `hugo-checker.yaml` and Hugo configuration file `config.yaml`.
 
-# How to use this repo
+## HugoChecker configuration file
 
-1. Click the Use This Template button to create your own repo as a copy of this (similar to forking, but doesn't have a fork relationship back to the original repo).
-2. Modify the action.yml to give your action a name/description, and setup any inputs you need.
-3. Modify the code in the src folder to do whatever you want your custom action to do, this is a .Net 5 Console App (C#).
-4. Use the [DotNetActionsToolkit NuGet package](https://www.nuget.org/packages/DotnetActionsToolkit/) (already included in the sample project) to interact with the the GitHub Actions environment. This is a port of the [actions/toolkit](https://github.com/actions/toolkit) npm packages that are used when developing javascript/typescript based actions. The goal was to make developing a .Net based action as similar an experience as possible to developing a JavaScript based action. You will use this NuGet package to get workflow inputs, set outputs, log info/warnings/errors, etc.
-5. Modify the build.ps1 file in the root of the repo to use the proper path/name to your sln file.
-6. Modify the run-action.ps1 file in the root of the repo to use the proper path/name of your binaries.
-7. Run build.ps1 to build a windows + linux + mac version of your action, and be sure to commit the resulting binaries along with your code changes.
-8. Modify .github/workflows/testing-action/action.yml to test your action.
+File `hugo-checker.yaml` - example configuration:
+
+```yaml
+folders-to-check:
+  - content
+  - content/blog
+required-headers:
+  - slug
+  - title
+  - description
+  - author
+  - date
+required:
+  - section:
+    - en:
+      - Personal experience
+      - Existential question
+      - Practice
+    - pl:
+      - Osobiste doświadczenie
+      - Egzystencjalne pytanie
+      - Praktyka
+  - category:
+    - en:
+      - Blog
+      - App
+      - Information
+    - pl:
+      - Blog
+      - Apka
+      - Informacja
+check-file-names: yes
+check-file-language: yes
+translated-newer-than-original: yes
+spellcheck: yes
+original-language: pl
+translated-language: en
+```
+
+### Switch folders-to-check
+
+List of folders containing markdown `*.md` files to check. 
+
+Example usage:
+
+```yaml
+folders-to-check:
+  - content
+  - content/blog
+```
+
+## Switch required-headers
+
+List of headers that must be defined in each markdown file.
+
+Example usage:
+
+```yaml
+required-headers:
+  - slug
+  - title
+  - description
+  - author
+  - date
+```
+
+
+
+
+
+
+
+
+
+
