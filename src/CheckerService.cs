@@ -68,10 +68,12 @@ public class CheckerService : ICheckerService
     private async Task CheckAllFilesAsync(ProcessingModel model)
     {
         core.Info("Checking all files content...");
-        core.Info($"Check required sections: {model.CheckerConfig.RequiredLists is { Count: > 0 }}");
+        core.Info($"Check required lists: {model.CheckerConfig.RequiredLists is { Count: > 0 }}");
         core.Info($"Check spellCheck: {model.CheckerConfig.SpellCheck}");
         core.Info($"Check required headers: {model.CheckerConfig.RequiredHeaders is { Count: > 0 }}");
         core.Info($"Check file language: {model.CheckerConfig.CheckFileLanguage}");
+        core.Info($"Check slug regex: {model.CheckerConfig.CheckSlugRegex}");
+        core.Info($"Slug regex pattern: {model.CheckerConfig.PatternSlugRegex}");
         foreach (var subfolder in model.CheckedFolders) 
             await CheckFilesInSubfolder(model, subfolder);
     }
@@ -132,6 +134,41 @@ public class CheckerService : ICheckerService
         
         if (model.CheckerConfig.SpellCheck)
             SpellCheckFileLanguage(model, languageModel);
+        
+        if (model.CheckerConfig.CheckSlugRegex)
+            CheckSlugRegex(model, languageModel);
+        
+        if (model.CheckerConfig.CheckHeaderDuplicates != null &&
+            model.CheckerConfig.CheckHeaderDuplicates.Any())
+            CheckHeaderDuplicates(model, languageModel);
+    }
+
+    private void CheckHeaderDuplicates(ProcessingModel model, FileLanguageModel languageModel)
+    {
+        foreach(var header in model.CheckerConfig.CheckHeaderDuplicates)
+            if (languageModel.Yaml.Children.ContainsKey(header))
+            {
+                var value = GetYamlValue(languageModel.Yaml, header);
+                
+                if (model.ProcessedDuplicates.ContainsKey(header) && 
+                    model.ProcessedDuplicates[header].ContainsKey(value))
+                    throw new Exception($"Detected duplicates {header}: '{value}' in two files '{model.ProcessedDuplicates[header][value]}' and '{languageModel.FilePath}'");
+
+                if (!model.ProcessedDuplicates.ContainsKey(header))
+                    model.ProcessedDuplicates.Add(header, new Dictionary<string, string>());
+                
+                model.ProcessedDuplicates[header][value] = languageModel.FilePath;
+            }
+    }
+
+    private void CheckSlugRegex(ProcessingModel model, FileLanguageModel languageModel)
+    {
+        if (languageModel.Yaml.Children.ContainsKey("slug"))
+        {
+            var slug = GetYamlValue(languageModel.Yaml, "slug");
+            if (!Regex.IsMatch(slug, model.CheckerConfig.PatternSlugRegex))
+                throw new Exception($"Slug '{slug}' doesn't match with the pattern '{model.CheckerConfig.PatternSlugRegex}'");
+        }
     }
 
     private void SpellCheckFileLanguage(ProcessingModel model, FileLanguageModel languageModel)

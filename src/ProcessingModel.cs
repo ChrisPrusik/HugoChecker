@@ -30,6 +30,10 @@ public class ProcessingModel
     public HugoCheckerConfig CheckerConfig { get; set; }
     
     public HugoConfig HugoConfig { get; set; }
+
+    public Dictionary<string, FolderModel> CheckedFolders { get; set; } = new();
+
+    public Dictionary<string, string> ProcessedSlugs { get; set; } = new();
     
-    public Dictionary<string, FolderModel> CheckedFolders { get; set; }
+    public Dictionary<string, Dictionary<string, string>> ProcessedDuplicates { get; set; } = new();
 }

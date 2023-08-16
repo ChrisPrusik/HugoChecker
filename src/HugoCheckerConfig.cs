@@ -25,19 +25,25 @@ namespace HugoChecker;
 
 public class HugoCheckerConfig
 {
-    public string DefaultLanguage { get; set; }
+    public string DefaultLanguage { get; set; } = "en";
 
-    public List<string> Languages { get; set; }
+    public List<string> Languages { get; set; } = new() { "en" };
 
-    public List<string> FoldersToCheck { get; set; }
+    public List<string> FoldersToCheck { get; set; } = new() { "content" };
 
-    public List<string> RequiredHeaders { get; set; }
+    public List<string> RequiredHeaders { get; set; } = new() { "title", "date" };
 
-    public Dictionary<string, Dictionary<string, List<string>?>?>? RequiredLists { get; set; }
+    public Dictionary<string, Dictionary<string, List<string>?>?>? RequiredLists { get; set; } = new();
 
-    public bool CheckFileLanguage { get; set; }
+    public bool CheckFileLanguage { get; set; } = true;
+
+    public List<string> IgnoreFiles { get; set; } = new();
+
+    public bool SpellCheck { get; set; } = false;
+
+    public List<string> CheckHeaderDuplicates { get; set; } = new() {"slug", "title"};
     
-    public List<string> IgnoreFiles { get; set; }
-
-    public bool SpellCheck { get; set; }
+    public bool CheckSlugRegex { get; set; } = true;
+    
+    public string PatternSlugRegex { get; set; } = @"^[a-z0-9]+(?:-[a-z0-9]+)*$";
 }
