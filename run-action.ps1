@@ -1,17 +1,17 @@
 if($IsWindows -eq $True)
 {
-    $filePath = Join-Path $PSScriptRoot "/dist/win-x64/arghul-hugo-checker.exe"
+    $filePath = Join-Path $PSScriptRoot "/dist/win-x64/hugo-checker.exe"
 }
 
 if($IsLinux -eq $True)
 {
-    $filePath = Join-Path $PSScriptRoot "/dist/linux-x64/arghul-hugo-checker"
+    $filePath = Join-Path $PSScriptRoot "/dist/linux-x64/hugo-checker"
     chmod +x $filePath
 }
 
 if($IsMacOS -eq $True)
 {
-    $filePath = Join-Path $PSScriptRoot "/dist/osx-x64/arghul-hugo-checker"
+    $filePath = Join-Path $PSScriptRoot "/dist/osx-x64/hugo-checker"
     chmod +x $filePath
 }
 
