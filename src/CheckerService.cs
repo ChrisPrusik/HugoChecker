@@ -230,12 +230,6 @@ public class CheckerService : ICheckerService
         core.Info($"Key default-language: {model.CheckerConfig.DefaultLanguage}, used for primary files *.md");
         CheckLanguage(model.CheckerConfig.DefaultLanguage, model);
 
-        core.Info($"Key original-language: {model.CheckerConfig.OriginalLanguage}");
-        CheckLanguage(model.CheckerConfig.OriginalLanguage, model);
-
-        core.Info($"Key translated-language: {model.CheckerConfig.TranslatedLanguage}");
-        CheckLanguage(model.CheckerConfig.TranslatedLanguage, model);
-
         core.Info($"Key languages: {string.Join(",", model.CheckerConfig.Languages)}");
         foreach (var language in model.CheckerConfig.Languages)
             CheckLanguage(language, model);
