@@ -1,0 +1,1 @@
+Nieskończony, błędny plik

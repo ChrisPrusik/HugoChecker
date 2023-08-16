@@ -8,8 +8,8 @@ folders-to-check:
   - content
   - content/blog
 ignore-files:
-  - content/terms.md
-  - content/terms.pl.md
+  - content/undone.md
+  - content/undone.pl.md
 required-headers:
   - slug
   - title
@@ -37,5 +37,10 @@ required-lists:
       - Blog
       - Apka
       - Informacja
+check-header-duplicates:
+  - slug
+  - title
 check-file-language: yes
 spell-check: yes
+check-slug-regex: yes
+pattern-slug-regex: ^[a-z0-9]+(?:-[a-z0-9]+)*$
