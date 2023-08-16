@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <RootNamespace>HugoChecker</RootNamespace>
+    <LangVersion>11</LangVersion>
+    <Nullable>enable</Nullable>
+    <Company>ChrisPrusik</Company>
+    <Authors>Chris Prusik and contributors</Authors>
+    <AssemblyName>HugoChecker</AssemblyName>
+    <Product>HugoChecker</Product>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotnetActionsToolkit" Version="1.0.11" />
+    <PackageReference Include="LanguageDetection.Ai" Version="1.0.5" />
+    <PackageReference Include="YamlDotNet" Version="13.1.1" />
+  </ItemGroup>
+
+</Project>
