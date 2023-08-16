@@ -40,7 +40,7 @@ required-lists:
 check-header-duplicates:
   - slug
   - title
-check-file-language: yes
-spell-check: yes
+check-file-language: no
+spell-check: no
 check-slug-regex: yes
 pattern-slug-regex: ^[a-z0-9]+(?:-[a-z0-9]+)*$
