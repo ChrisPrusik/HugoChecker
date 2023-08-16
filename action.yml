@@ -1,6 +1,6 @@
 name: HugoChecker
 description: Check all the hugo files based on the hugo-checker.yaml file
-author: Arghul
+author: ChrisPrusik
 inputs:
   hugo-folder:
     required: true
