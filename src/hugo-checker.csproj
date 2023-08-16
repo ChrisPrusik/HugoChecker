@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="DotnetActionsToolkit" Version="1.0.11" />
+    <PackageReference Include="LanguageDetection.Ai" Version="1.0.5" />
     <PackageReference Include="YamlDotNet" Version="13.1.1" />
   </ItemGroup>
 

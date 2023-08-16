@@ -19,7 +19,10 @@ runs:
 ```
 The input `hugo-folder` is the root folder of the Hugo project.
 
-> **NOTE:** The current version of the action operates only on yaml configurations.
+> **NOTE:** 
+>
+> * The current version of the action operates only on yaml configurations.
+> * Language code must be in two letter: en, pl etc.
 
 ## Configuration files
 

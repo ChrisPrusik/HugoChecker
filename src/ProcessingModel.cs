@@ -1,4 +1,4 @@
-﻿// This file is part of HugoChecker - A GitHub Action to check Hugo markdown files.
+// This file is part of HugoChecker - A GitHub Action to check Hugo markdown files.
 // Copyright (c) Krzysztof Prusik and contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -19,33 +19,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System;
-using System.Threading.Tasks;
-using DotnetActionsToolkit;
+using System.Collections.Generic;
 
 namespace HugoChecker;
 
-public class Program
+public class ProcessingModel
 {
-    private static async Task Main(string[] args)
-    {
-        var core = new Core();
-        var checkerService = new CheckerService(core);
-        try
-        {
-            if (args.Length > 0)
-                await checkerService.Check(args[0]);
-            else
-                await checkerService.Check();
-        }
-        catch (Exception ex)
-        {
-            core.SetFailed(ex.Message);
-            while (ex.InnerException != null)
-            {
-                ex = ex.InnerException;
-                core.SetFailed(ex.Message);
-            }
-        }
-    }
+    public string HugoFolder { get; set; }
+    
+    public HugoCheckerConfig CheckerConfig { get; set; }
+    
+    public HugoConfig HugoConfig { get; set; }
+    
+    public Dictionary<string, FolderModel> CheckedFolders { get; set; }
 }

@@ -1,9 +1,13 @@
 ---
 slug: regulamin
 title: Regulamin strony
-description: 
+description: Regulamin strony
 date: 2019-02-28
 author: Chris Prusik
+series:
+  - Inne
+categories:
+  - Informacja
 ---
 
 # Regulamin

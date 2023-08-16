@@ -1,9 +1,13 @@
 ---
 slug: contact
 title: Contact
-description: 
+description: Contact
 date: 2019-02-28
 author: Chris Prusik
+series:
+  - Other
+categories:
+  - Information
 ---
 
 ## Contact Us
