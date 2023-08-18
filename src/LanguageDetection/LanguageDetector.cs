@@ -77,7 +77,7 @@ public class LanguageDetector : ILanguageDetector
                     JsonLanguageProfile jsonProfile = JsonSerializer.Deserialize<JsonLanguageProfile>(json,
                         new JsonSerializerOptions()
                         {
-                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                            PropertyNamingPolicy = new JsonLanguageProfileNamingPolicy()
                         });
 
                     profile.Code = jsonProfile.Name;
