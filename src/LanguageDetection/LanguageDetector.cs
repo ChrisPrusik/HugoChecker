@@ -74,7 +74,11 @@ public class LanguageDetector : ILanguageDetector
                     LanguageProfile profile = new LanguageProfile();
 
                     string json = sw.ReadToEnd();
-                    JsonLanguageProfile jsonProfile = JsonSerializer.Deserialize<JsonLanguageProfile>(json);
+                    JsonLanguageProfile jsonProfile = JsonSerializer.Deserialize<JsonLanguageProfile>(json,
+                        new JsonSerializerOptions()
+                        {
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                        });
 
                     profile.Code = jsonProfile.Name;
                     profile.Frequencies = jsonProfile.Freq;
