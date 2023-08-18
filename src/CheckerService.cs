@@ -138,8 +138,7 @@ public class CheckerService : ICheckerService
         if (model.CheckerConfig.CheckSlugRegex)
             CheckSlugRegex(model, languageModel);
         
-        if (model.CheckerConfig.CheckHeaderDuplicates != null &&
-            model.CheckerConfig.CheckHeaderDuplicates.Any())
+        if (model.CheckerConfig.CheckHeaderDuplicates.Any())
             CheckHeaderDuplicates(model, languageModel);
     }
 
@@ -185,8 +184,9 @@ public class CheckerService : ICheckerService
 
     private void CheckRequiredLists(ProcessingModel model, FileLanguageModel languageModel)
     {
-        foreach(var pair in model.CheckerConfig.RequiredLists)
-            CheckRequiredList(model, languageModel, pair.Key);
+        if (model.CheckerConfig.RequiredLists is not null)
+            foreach(var pair in model.CheckerConfig.RequiredLists)
+                CheckRequiredList(model, languageModel, pair.Key);
     }
 
     private void CheckRequiredList(ProcessingModel model, FileLanguageModel languageModel, string key)
@@ -201,6 +201,9 @@ public class CheckerService : ICheckerService
 
     private void CheckRequiredListItem(ProcessingModel model, FileLanguageModel languageModel, string key, string value)
     {
+        if (!model.CheckerConfig.RequiredLists.ContainsKey(key))
+            throw new Exception($"There are no required list '{key}' in the file {languageModel.FilePath}. Check required-lists in the hugo-checker.yaml");
+
         if (!model.CheckerConfig.RequiredLists[key].ContainsKey(languageModel.Language))
             throw new Exception($"There are no required list '{key}' in the file {languageModel.FilePath} for language {languageModel.Language}");
 
