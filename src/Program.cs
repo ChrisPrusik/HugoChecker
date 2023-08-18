@@ -20,39 +20,31 @@
 // SOFTWARE.
 
 using System;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using DotnetActionsToolkit;
+using HugoChecker;
 
-namespace HugoChecker;
+var serviceProvider = new ServiceCollection()
+    .AddSingleton<Core>()
+    .AddSingleton<ICheckerService, CheckerService>()
+    .BuildServiceProvider();
 
-public class Program
+var checkerService = serviceProvider.GetRequiredService<ICheckerService>();
+
+try
 {
-    private static async Task Main(string[] args)
+    if (args.Length > 0)
+        await checkerService.Check(args[0]);
+    else
+        await checkerService.Check();
+}
+catch (Exception ex)
+{
+    var core = new Core();
+    core.SetFailed(ex.Message);
+    while (ex.InnerException != null)
     {
-        var serviceProvider = new ServiceCollection()
-            .AddSingleton<Core>()
-            .AddSingleton<ICheckerService, CheckerService>()
-            .BuildServiceProvider();
-
-        var checkerService = serviceProvider.GetRequiredService<ICheckerService>();
-
-        try
-        {
-            if (args.Length > 0)
-                await checkerService.Check(args[0]);
-            else
-                await checkerService.Check();
-        }
-        catch (Exception ex)
-        {
-            var core = new Core();
-            core.SetFailed(ex.Message);
-            while (ex.InnerException != null)
-            {
-                ex = ex.InnerException;
-                core.SetFailed(ex.Message);
-            }
-        }
+        ex = ex.InnerException;
+        core.SetFailed(ex.Message);
     }
 }
