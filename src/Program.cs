@@ -21,6 +21,7 @@
 
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using DotnetActionsToolkit;
 
 namespace HugoChecker;
@@ -29,8 +30,13 @@ public class Program
 {
     private static async Task Main(string[] args)
     {
-        var core = new Core();
-        var checkerService = new CheckerService(core);
+        var serviceProvider = new ServiceCollection()
+            .AddSingleton<Core>()
+            .AddSingleton<ICheckerService, CheckerService>()
+            .BuildServiceProvider();
+
+        var checkerService = serviceProvider.GetRequiredService<ICheckerService>();
+
         try
         {
             if (args.Length > 0)
@@ -40,6 +46,7 @@ public class Program
         }
         catch (Exception ex)
         {
+            var core = new Core();
             core.SetFailed(ex.Message);
             while (ex.InnerException != null)
             {
