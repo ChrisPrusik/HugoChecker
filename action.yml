@@ -6,6 +6,10 @@ inputs:
     required: true
     description: Path to the folder with all hugo files
     default: C:\inetpub\wwwroot
+  chatgpt-api-key:
+    required: false
+    description: API key for chatgpt
+    default: 0
 runs:
   using: 'node12'
   main: 'index.js'

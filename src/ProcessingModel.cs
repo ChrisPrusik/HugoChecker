@@ -26,6 +26,8 @@ namespace HugoChecker;
 public class ProcessingModel
 {
     public string HugoFolder { get; set; }
+
+    public bool IsChatGptAvailable { get; set; } = false;
     
     public HugoCheckerConfig CheckerConfig { get; set; }
     

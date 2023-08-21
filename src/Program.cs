@@ -23,9 +23,17 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using DotnetActionsToolkit;
 using HugoChecker;
+using Microsoft.Extensions.Configuration;
+
+var config = new ConfigurationBuilder()
+    .AddUserSecrets<Program>()
+    .AddEnvironmentVariables()
+    .Build();
 
 var serviceProvider = new ServiceCollection()
     .AddSingleton<Core>()
+    .AddSingleton<IYamlService, YamlService>()
+    .AddSingleton<IChatGptService, ChatGptService>()
     .AddSingleton<ICheckerService, CheckerService>()
     .BuildServiceProvider();
 
@@ -33,10 +41,11 @@ var checkerService = serviceProvider.GetRequiredService<ICheckerService>();
 
 try
 {
+    var hugoFolder = config["HUGO_FOLDER"];
     if (args.Length > 0)
-        await checkerService.Check(args[0]);
-    else
-        await checkerService.Check();
+        hugoFolder = args[0];
+    
+    await checkerService.Check(hugoFolder, config["CHATGPT_API_KEY"]);
 }
 catch (Exception ex)
 {

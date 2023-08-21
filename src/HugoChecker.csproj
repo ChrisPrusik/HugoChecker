@@ -10,12 +10,21 @@
     <Authors>Chris Prusik and contributors</Authors>
     <AssemblyName>HugoChecker</AssemblyName>
     <Product>HugoChecker</Product>
+    <UserSecretsId>1423ef5e-187f-4876-9f3f-117244a8a488</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="DotnetActionsToolkit" Version="1.0.11" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="OpenAI" Version="1.7.2" />
     <PackageReference Include="YamlDotNet" Version="13.1.1" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Remove="Prompts\LanguageDetect.txt" />
   </ItemGroup>
 
 </Project>

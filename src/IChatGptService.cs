@@ -23,7 +23,8 @@ using System.Threading.Tasks;
 
 namespace HugoChecker;
 
-public interface ICheckerService
+public interface IChatGptService
 {
-    Task Check(string? hugoFolder = null, string? chatGptApiKey = null);
+    Task Initialise(string? chatGptApiKey);
+    Task<string> LanguageDetect(string text);
 }
