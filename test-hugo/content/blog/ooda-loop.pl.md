@@ -7,11 +7,7 @@ author: Chris Prusik
 series:
   - Inne
 categories:
-  - Informacja
-tags:
-  - hugo
-  - markdown
-  - emoji
+  - Dla wszystkich
 draft: no
 ---
 

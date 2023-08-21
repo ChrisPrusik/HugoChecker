@@ -16,6 +16,8 @@ required-headers:
   - description
   - author
   - date
+  - series
+  - categories
 required-lists:
   series:
     en:
@@ -30,12 +32,14 @@ required-lists:
       - Inne
   categories:
     en:
-      - Blog
-      - App
+      - For everyone
+      - For beginners
+      - For advanced
       - Information
     pl:
-      - Blog
-      - Apka
+      - Dla wszystkich
+      - Dla początkujących
+      - Dla zaawansowanych
       - Informacja
 check-header-duplicates:
   - slug

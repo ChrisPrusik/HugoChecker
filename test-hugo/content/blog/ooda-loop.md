@@ -7,11 +7,7 @@ author: Chris Prusik
 series: 
   - Existential question
 categories: 
-  - Blog
-tags:
-  - hugo
-  - markdown
-  - emoji
+  - For everyone
 draft: no
 ---
 

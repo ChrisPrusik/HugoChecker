@@ -30,20 +30,16 @@ using DotnetActionsToolkit;
 using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
-using LanguageDetection;
 
 namespace HugoChecker;
 
 public class CheckerService : ICheckerService
 {
     private readonly Core core;
-    private readonly LanguageDetector languageDetector;
 
     public CheckerService(Core core)
     {
         this.core = core;
-        languageDetector = new LanguageDetector();
-        languageDetector.AddAllLanguages();
     }
 
     public async Task Check(string? hugoFolder = null)
@@ -350,7 +346,8 @@ public class CheckerService : ICheckerService
 
     private string DetectLanguage(string text)
     {
-        var language = languageDetector.Detect(text);
+        //UNDONE: use ChatGPT3 to detect language
+        var language = "en";
         if (string.IsNullOrWhiteSpace(language))
             throw new Exception($"Unable to detect language from text '{text}'");
         
