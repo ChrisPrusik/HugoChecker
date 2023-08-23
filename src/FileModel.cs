@@ -26,8 +26,6 @@ namespace HugoChecker;
 
 public class FileModel
 {
-    public string Id => Path.GetFileNameWithoutExtension(RootFilePath);
-    
     public string RootFilePath { get; set; }
     
     public Dictionary<string, FileLanguageModel> LanguageFiles { get; set; }

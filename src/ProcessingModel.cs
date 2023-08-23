@@ -26,16 +26,14 @@ namespace HugoChecker;
 public class ProcessingModel
 {
     public string HugoFolder { get; set; }
-
-    public bool IsChatGptAvailable { get; set; } = false;
     
     public HugoCheckerConfig CheckerConfig { get; set; }
     
     public HugoConfig HugoConfig { get; set; }
 
-    public Dictionary<string, FolderModel> CheckedFolders { get; set; } = new();
+    public bool IsChatGptAvailable { get; set; } = false;
 
-    public Dictionary<string, string> ProcessedSlugs { get; set; } = new();
+    public Dictionary<string, FolderModel> CheckedFolders { get; set; } = new();
     
     public Dictionary<string, Dictionary<string, string>> ProcessedDuplicates { get; set; } = new();
 }
