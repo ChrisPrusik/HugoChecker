@@ -23,9 +23,9 @@ namespace HugoChecker;
 
 public class ChatGptResult
 {
-    public string Language { get; set; }
-    
-    public bool SpellCheck { get; set; }
+    public string Language { get; set; } = "en";
 
-    public  string Comment { get; set; }
+    public bool SpellCheck { get; set; } = true;
+
+    public string Comment { get; set; } = string.Empty;
 }

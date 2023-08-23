@@ -19,18 +19,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System;
 using System.Threading.Tasks;
-using OpenAI_API.Models;
 
 namespace HugoChecker;
 
 public interface IChatGptService
 {
-    string ChatGptPrompt { get; set; }
-    Double ChatGptTemperature { get; set; }
-    int ChatGptMaxTokens { get; set; }
-    string ChatGptModel { get; set; }
-    Task Initialise(string? chatGptApiKey);
-    Task<string> CheckText(string text);
+    Task Initialise(string apiKey, string prompt,
+        string? model = null, double? temperature = null, int? maxTokens = null);
+    Task SpellCheck(string? text, string? expectedLanguage = null);
 }

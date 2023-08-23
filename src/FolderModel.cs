@@ -25,7 +25,7 @@ namespace HugoChecker;
 
 public class FolderModel
 {
-    public string SubFolder { get; set; }
-    
-    public Dictionary<string, FileModel> Files { get; set; }
+    public string SubFolder { get; set; } = string.Empty;
+
+    public Dictionary<string, FileModel> Files { get; set; } = new();
 }

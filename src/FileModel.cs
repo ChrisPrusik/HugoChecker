@@ -20,13 +20,12 @@
 // SOFTWARE.
 
 using System.Collections.Generic;
-using System.IO;
 
 namespace HugoChecker;
 
 public class FileModel
 {
-    public string RootFilePath { get; set; }
-    
-    public Dictionary<string, FileLanguageModel> LanguageFiles { get; set; }
+    public string RootFilePath { get; set; } = string.Empty;
+
+    public Dictionary<string, FileLanguageModel> LanguageFiles { get; set; } = new();
 }

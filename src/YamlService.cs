@@ -22,6 +22,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization;
@@ -38,10 +39,13 @@ public class YamlService : IYamlService
         yaml.Load(reader);
         return (YamlMappingNode)yaml.Documents[0].RootNode;
     }
-    public string GetStringValue(YamlMappingNode mapping, string key)
+    public string GetStringValue(YamlMappingNode? mapping, string key)
     {
         try
         {
+            if (mapping == null)
+                throw new Exception("Yaml is empty.");
+
             return mapping[new YamlScalarNode(key)].ToString();
         }
         catch (Exception ex)
@@ -50,15 +54,15 @@ public class YamlService : IYamlService
         }
     }
 
-    public List<string> GetListValue(YamlMappingNode mapping, string key)
+    public List<string> GetListValue(YamlMappingNode? mapping, string key)
     {
         try
         {
-            var list = new List<string>();
+            if (mapping == null)
+                throw new Exception("Yaml is empty.");
+
             var node = mapping[new YamlScalarNode(key)];
-            foreach (var item in (YamlSequenceNode)node)
-                list.Add(item.ToString());
-            return list;
+            return (from item in (YamlSequenceNode)node select item.ToString()).ToList();
         }
         catch (Exception ex)
         {
@@ -66,9 +70,9 @@ public class YamlService : IYamlService
         }
     }
     
-    public bool ContainsChild(YamlMappingNode mapping, string key)
+    public bool ContainsChild(YamlMappingNode? mapping, string key)
     {
-        return mapping.Children.ContainsKey(key);
+        return mapping != null && mapping.Children.ContainsKey(key);
     }
 
     public async Task<HugoCheckerConfig> ReadFromFile(string filePath)

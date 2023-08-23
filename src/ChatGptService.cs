@@ -24,72 +24,57 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using OpenAI_API;
 using OpenAI_API.Chat;
-using OpenAI_API.Models;
-using YamlDotNet.Serialization.NamingConventions;
 
 namespace HugoChecker;
 
 public class ChatGptService : IChatGptService
 {
-    private OpenAIAPI? openAIApi = null;
+    private OpenAIAPI? openAiApi;
     
-    private Conversation? languageDetector = null;
-    public Conversation LanguageDetector => GetLanguageDetectConversation();
-
-    private const int maxTextLength = 20000;
+    private Conversation? languageDetector;
     
-    public Double ChatGptTemperature { get; set; } = 0.9;
-    public int ChatGptMaxTokens { get; set; } = 1000;
-    public string ChatGptModel { get; set; } = "GPT4";
-
-    public string ChatGptPrompt { get; set; } = """
-        Your role is to check the text message provided by the user in the next messages.
-        You will have to tasks to done. And result of the task put in an answer as json,
-        see example below:
+    public async Task Initialise(string apiKey, string prompt, 
+        string? model = null, double? temperature = null, int? maxTokens = null)
+    {
+        if (openAiApi == null)
         {
-            "Language": "en",
-            "SpellCheck": true
-            "Comment": "Everything is ok"
+            openAiApi = new OpenAIAPI(apiKey);
+            if (!await openAiApi.Auth.ValidateAPIKey())
+                throw new Exception("Invalid OpenAI ChatGPT API key");
         }
         
-        Task 1: Language detection.
-        
-        Your role is to identify language of the text message provided by the user in the next messages.
-        Do not ask any questions - just make a judgement.
-        If you are not sure about the language, choose the most probable one.
-        Your answer should be only two letter code of the language (ISO 639-1 code),
-        as the first json value (in our example it is "en").
-    
-        Task 2: Spellcheck.
-        
-        Your role is to check the correctness of the text in terms of style and grammar.
-        Do not ask any questions - just make a judgement.
-        As an answer in one word "true" - if everything is correct, as second json value, and "" as third json value.
-        Otherwise, as an answer, wrote "false" as second json value and
-        write a comment with an explanation and necessarily
-        indicate the exact incorrect fragment as a quote, enclosed in quotation marks "" as third json value.
-    """;
-
-    public async Task Initialise(string? chatGptApiKey)
-    {
-        openAIApi = new OpenAIAPI(chatGptApiKey);
-        if (!await openAIApi.Auth.ValidateAPIKey())
-            throw new Exception("Invalid OpenAI ChatGPT API key");
+        CreateLanguageDetectConversation(prompt, model, temperature, maxTokens);
     }
 
-    public async Task<string> CheckText(string text)
+    private void CreateLanguageDetectConversation(string prompt, 
+        string? model = null, double? temperature = null, int? maxTokens = null)
     {
-        if (LanguageDetector == null)
+        if (openAiApi == null)
+            throw new Exception("OpenAI ChatGPT API is not initialised");
+
+        var request = new ChatRequest()
+        {
+            Model = model ?? "gpt-4",
+            Temperature = temperature ?? 0.9,
+            MaxTokens = maxTokens ?? 2000,
+        };
+        languageDetector = openAiApi.Chat.CreateConversation(request);
+        languageDetector.AppendMessage(ChatMessageRole.User, prompt);
+
+        if (languageDetector == null)
+            throw new Exception("Unable to create ChatGPT conversation");
+    }               
+
+    public async Task SpellCheck(string? text, string? expectedLanguage = null)
+    {
+        if (languageDetector == null)
             throw new Exception("ChatGPT is not available");
         
         if (string.IsNullOrWhiteSpace(text))
             throw new Exception("Text to detect language is empty");
 
-        if (text.Length > maxTextLength)
-            text = text.Substring(0, maxTextLength);
-
-        LanguageDetector.AppendMessage(ChatMessageRole.User, text);
-        var response = await LanguageDetector.GetResponseFromChatbotAsync();
+        languageDetector.AppendMessage(ChatMessageRole.User, text);
+        var response = await languageDetector.GetResponseFromChatbotAsync();
         var result = JsonSerializer.Deserialize<ChatGptResult>(response);
         if (result == null)
             throw new Exception("Unable to deserialize ChatGPT response");
@@ -102,38 +87,7 @@ public class ChatGptService : IChatGptService
         if (string.IsNullOrWhiteSpace(language) || language.Length != 2)
             throw new Exception($"Unable to detect language from text '{text}'");
 
-        return language.ToLower().Trim();
+        if (language != expectedLanguage)
+            throw new Exception($"Language detected '{language}' is different than expected '{expectedLanguage}'");
     }
-    
-    // private void string GetModel()
-    // {
-    //     switch (ChatGptModel.Trim().ToLower())
-    //     {
-    //         "gpt4" => Model.GPT4,
-    //         "turbo" => Model.ChatGPTTurbo,
-    //     }
-    // }
-
-    private Conversation GetLanguageDetectConversation()
-    {
-        if (languageDetector != null)
-            return languageDetector;
-        
-        if (openAIApi == null)
-            throw new Exception("ChatGPT is not available");
-
-        var request = new ChatRequest()
-        {
-            Model = ChatGptModel,
-            Temperature = ChatGptTemperature,
-            MaxTokens = ChatGptMaxTokens,
-        };
-        languageDetector = openAIApi.Chat.CreateConversation(request);
-        LanguageDetector.AppendMessage(ChatMessageRole.User, ChatGptPrompt);
-
-        if (languageDetector == null)
-            throw new Exception("Unable to create ChatGPT conversation");
-
-        return languageDetector;
-    }               
 }

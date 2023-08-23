@@ -21,7 +21,6 @@
 
 using System;
 using System.Collections.Generic;
-using OpenAI_API.Models;
 
 namespace HugoChecker;
 
@@ -35,19 +34,27 @@ public class HugoCheckerConfig
 
     public List<string> RequiredHeaders { get; set; } = new() { "title", "date" };
 
-    public Dictionary<string, Dictionary<string, List<string>>> RequiredLists { get; set; } = new();
+    public Dictionary<string, Dictionary<string, List<string>>> RequiredLists { get; set; } = new()
+    {
+        {
+            "sections", new Dictionary<string, List<string>>
+            {
+                {"en", new List<string> {"Information", "Other"}},
+            }
+        }
+    };
 
     public bool CheckFileLanguage { get; set; } = true;
 
-    public List<string> IgnoreFiles { get; set; } = new();
-
-    public bool SpellCheck { get; set; } = false;
+    public List<string> IgnoreFiles { get; set; } = new() { "Unused.md" };
 
     public List<string> CheckHeaderDuplicates { get; set; } = new() {"slug", "title"};
     
     public bool CheckSlugRegex { get; set; } = true;
     
     public string PatternSlugRegex { get; set; } = @"^[a-z0-9]+(?:-[a-z0-9]+)*$";
+
+    public bool ChatGptSpellCheck { get; set; } = false;
 
     public string ChatGptPrompt { get; set; } = """
         Your role is to check the text message provided by the user in the next messages.
@@ -68,20 +75,13 @@ public class HugoCheckerConfig
         as the first json value (in our example it is "en").
     
         Task 2: Spellcheck.
-     
-    """;
 
-    public string ChatGptSpellCheckPrompt { get; set; } = """
         Your role is to check the correctness of the text in terms of style and grammar.
         Do not ask any questions - just make a judgement.
         As an answer in one word "true" - if everything is correct, as second json value, and "" as third json value.
         Otherwise, as an answer, wrote "false" as second json value and
         write a comment with an explanation and necessarily
         indicate the exact incorrect fragment as a quote, enclosed in quotation marks "" as third json value.
-    """;
-
-    public string ChatGptNoSpellCheckPrompt { get; set; } = """
-        Answer in one word "true" - as second json value, and "" as third json value.
     """;
     
     public Double ChatGptTemperature { get; set; } = 0.9;

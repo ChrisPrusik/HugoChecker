@@ -45,9 +45,9 @@ check-header-duplicates:
   - slug
   - title
 check-file-language: yes
-spell-check: no
 check-slug-regex: yes
 pattern-slug-regex: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+chat-gpt-spell-check: yes
 chat-gpt-prompt: >
   Your role is to check the text message provided by the user in the next messages.
   You will have to tasks to done. And result of the task put in an answer as json, 
@@ -67,15 +67,13 @@ chat-gpt-prompt: >
   as the first json value (in our example it is "en").
 
   Task 2: Spellcheck.
-chat-gpt-spell-check-prompt: >
+
   Your role is to check the correctness of the text in terms of style and grammar.
   Do not ask any questions - just make a judgement.
   As an answer in one word "true" - if everything is correct, as second json value, and "" as third json value.
   Otherwise, as an answer, wrote "false" as second json value and
   write a comment with an explanation and necessarily
   indicate the exact incorrect fragment as a quote, enclosed in quotation marks "" as third json value.
-chat-gpt-no-spell-check-prompt: >
-  Answer in one word "true" - as second json value, and "" as third json value.
 chat-gpt-model: gpt-4  
 chat-gpt-temperature: 0.5
 chat-gpt-max-tokens: 1000

@@ -26,15 +26,21 @@ namespace HugoChecker;
 
 public class FileLanguageModel
 {
+    public FileLanguageModel(string language, string filePath)
+    {
+        Language = language;
+        FilePath = filePath;
+    }
+    
     public string Language { get; set; }
 
     public string FilePath { get; set; }
     
-    public FileInfo FileInfo { get; set;}
+    public FileInfo? FileInfo { get; set;}
 
-    public string Header { get; set; }
-    
-    public YamlMappingNode Yaml { get; set; }
+    public string? Header { get; set; }
 
-    public string Body { get; set; }
+    public YamlMappingNode? Yaml { get; set; }
+
+    public string? Body { get; set; }
 }

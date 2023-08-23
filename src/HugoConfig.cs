@@ -19,13 +19,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Collections.Generic;
-
 namespace HugoChecker;
 
 public class HugoConfig
 {
-    public string Title { get; set; }
-    
-    public string LanguageCode { get; set; }
+    public string Title { get; set; } = string.Empty;
+
+    public string LanguageCode { get; set; } = "en";
 }

@@ -25,13 +25,18 @@ namespace HugoChecker;
 
 public class ProcessingModel
 {
+    public ProcessingModel(string hugoFolder, HugoCheckerConfig checkerConfig, HugoConfig hugoConfig)
+    {
+        HugoFolder = hugoFolder;
+        CheckerConfig = checkerConfig;
+        HugoConfig = hugoConfig;
+    }
+    
     public string HugoFolder { get; set; }
     
     public HugoCheckerConfig CheckerConfig { get; set; }
     
     public HugoConfig HugoConfig { get; set; }
-
-    public bool IsChatGptAvailable { get; set; } = false;
 
     public Dictionary<string, FolderModel> CheckedFolders { get; set; } = new();
     

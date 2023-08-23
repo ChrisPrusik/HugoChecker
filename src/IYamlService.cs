@@ -21,8 +21,6 @@
 
 using System.Collections.Generic;
 using YamlDotNet.RepresentationModel;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 using System.Threading.Tasks;
 
 namespace HugoChecker;
@@ -30,8 +28,8 @@ namespace HugoChecker;
 public interface IYamlService
 {
     YamlMappingNode GetYamlFromText(string text);
-    List<string> GetListValue(YamlMappingNode mapping, string key);
-    string GetStringValue(YamlMappingNode mapping, string key);
-    bool ContainsChild(YamlMappingNode mapping, string key);
+    List<string> GetListValue(YamlMappingNode? mapping, string key);
+    string GetStringValue(YamlMappingNode? mapping, string key);
+    bool ContainsChild(YamlMappingNode? mapping, string key);
     Task<HugoCheckerConfig> ReadFromFile(string filePath);
 }
