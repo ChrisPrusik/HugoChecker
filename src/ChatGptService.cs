@@ -24,6 +24,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using OpenAI_API;
 using OpenAI_API.Chat;
+using System.Net.Http;
 
 namespace HugoChecker;
 
@@ -74,7 +75,7 @@ public class ChatGptService : IChatGptService
             throw new Exception("Text to detect language is empty");
 
         languageDetector.AppendMessage(ChatMessageRole.User, text);
-        var response = await languageDetector.GetResponseFromChatbotAsync();
+        var response = await GetResponse();
         var result = JsonSerializer.Deserialize<ChatGptResult>(response);
         if (result == null)
             throw new Exception("Unable to deserialize ChatGPT response");
@@ -89,5 +90,24 @@ public class ChatGptService : IChatGptService
 
         if (language != expectedLanguage)
             throw new Exception($"Language detected '{language}' is different than expected '{expectedLanguage}'");
+    }
+
+    private async Task<string> GetResponse(int level = 4, int delay = 1000)
+    {
+        if (languageDetector == null)
+            throw new NotImplementedException("languageDetector is not initialised");
+
+        try
+        {
+            return await languageDetector.GetResponseFromChatbotAsync();
+        }
+        catch (Exception ex)
+        {
+            if (ex.Source != "OpenAI_API" || level < 0)
+                throw;
+            
+            await Task.Delay(delay);
+            return await GetResponse(level -1, delay * 2);
+        }
     }
 }

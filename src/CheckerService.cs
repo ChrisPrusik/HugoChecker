@@ -200,10 +200,17 @@ public class CheckerService : ICheckerService
             return;
         }
 
-        if (model.CheckerConfig.CheckFileLanguage)
-            await chatGptService.SpellCheck(languageModel.Body, languageModel.Language);
-        else
-            await chatGptService.SpellCheck(languageModel.Body);
+        try
+        {
+            if (model.CheckerConfig.CheckFileLanguage)
+                await chatGptService.SpellCheck(languageModel.Body, languageModel.Language);
+            else
+                await chatGptService.SpellCheck(languageModel.Body);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"File '{languageModel.FilePath}' failed spellcheck.", ex);
+        }
     }
 
     private void CheckFileLanguageLocally(string text, string expectedLanguage)
@@ -216,9 +223,8 @@ public class CheckerService : ICheckerService
 
     private void CheckRequiredLists(ProcessingModel model, FileLanguageModel languageModel)
     {
-        if (model.CheckerConfig.RequiredLists is not null)
-            foreach(var pair in model.CheckerConfig.RequiredLists)
-                CheckRequiredList(model, languageModel, pair.Key);
+        foreach(var pair in model.CheckerConfig.RequiredLists)
+            CheckRequiredList(model, languageModel, pair.Key);
     }
 
     private void CheckRequiredList(ProcessingModel model, FileLanguageModel languageModel, string key)
