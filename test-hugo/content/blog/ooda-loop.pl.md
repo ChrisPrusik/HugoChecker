@@ -11,6 +11,6 @@ categories:
 draft: no
 ---
 
-Pierwsza notka na blogu
+Pierwsza notatka na blogu.
 
----
+## Cokolwiek
