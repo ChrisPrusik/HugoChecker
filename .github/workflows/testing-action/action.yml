@@ -3,8 +3,6 @@ runs:
   using: 'composite'
   steps:
     - name: Run Action
-      env:
-        chatgptapikey: ${{ secrets.CHATGPT_API_KEY }}
       uses: __CUSTOM_ACTION_REPO__@__GITHUB_SHA__
       id: sample
       with:
