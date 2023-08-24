@@ -45,5 +45,5 @@ public class FileLanguageModel
 
     public string? Body { get; set; }
     
-    public MarkdownDocument MarkDown { get; set; }
+    public MarkdownDocument? MarkDown { get; set; }
 }

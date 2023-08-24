@@ -25,7 +25,7 @@ namespace HugoChecker;
 
 public interface IChatGptService
 {
-    Task Initialise(string apiKey, string prompt,
+    Task Initialise(string? apiKey, string? prompt,
         string? model = null, double? temperature = null, int? maxTokens = null);
     Task SpellCheck(string? text, string? expectedLanguage = null);
 }

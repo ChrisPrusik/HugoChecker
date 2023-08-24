@@ -5,15 +5,33 @@ languages:
   - pl
   - en
 ignore-files:
-  - undone.md
-  - undone.pl.md
 required-headers:
   - slug
   - title
   - description
   - author
   - date
+  - series
+  - categories
 required-lists:
+  series:
+    en:
+      - Personal experience
+      - Existential question
+      - Practice
+    pl:
+      - Osobiste doświadczenie
+      - Egzystencjalne pytanie
+      - Praktyka
+  categories:
+    en:
+      - For everyone
+      - For beginners
+      - For advanced
+    pl:
+      - Dla wszystkich
+      - Dla początkujących
+      - Dla zaawansowanych
 check-header-duplicates:
   - slug
   - title

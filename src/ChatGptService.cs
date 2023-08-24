@@ -24,7 +24,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using OpenAI_API;
 using OpenAI_API.Chat;
-using System.Net.Http;
 
 namespace HugoChecker;
 
@@ -34,9 +33,15 @@ public class ChatGptService : IChatGptService
     
     private Conversation? languageDetector;
     
-    public async Task Initialise(string apiKey, string prompt, 
+    public async Task Initialise(string? apiKey, string? prompt, 
         string? model = null, double? temperature = null, int? maxTokens = null)
     {
+        if (string.IsNullOrWhiteSpace(apiKey))
+            throw new Exception("The ChatGPT API key is empty");
+        
+        if (string.IsNullOrWhiteSpace(prompt))
+            throw new Exception("The ChatGPT prompt is empty");
+        
         if (openAiApi == null)
         {
             openAiApi = new OpenAIAPI(apiKey);
@@ -47,7 +52,7 @@ public class ChatGptService : IChatGptService
         CreateLanguageDetectConversation(prompt, model, temperature, maxTokens);
     }
 
-    private void CreateLanguageDetectConversation(string prompt, 
+    private void CreateLanguageDetectConversation(string? prompt, 
         string? model = null, double? temperature = null, int? maxTokens = null)
     {
         if (openAiApi == null)
