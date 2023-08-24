@@ -13,4 +13,6 @@ draft: no
 
 Pierwsza notatka na blogu.
 
-## Cokolwiek
+## Jakiś inny tytuł
+
+I trochę informacji na ten temat.

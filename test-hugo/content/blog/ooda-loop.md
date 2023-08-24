@@ -13,4 +13,6 @@ draft: no
 
 First note on the blog.
 
-# Something
+# Another title
+
+And some information about it.
