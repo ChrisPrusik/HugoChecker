@@ -392,13 +392,17 @@ public class CheckerService : ICheckerService
 
     private string GetFileHeaderAsText(string text)
     {
-        var pattern = @"---\n([\s\S]*?)\n---";
-        var matches = Regex.Matches(text, pattern, RegexOptions.Multiline);
-        if (matches.Count == 0)
-            throw new Exception("Unable to find header.");
+        int firstPosition = text.IndexOf("---", StringComparison.Ordinal);
+        if (firstPosition < 0)
+            throw new Exception("Unable to find header in the file");
+        
+        int secondPosition = text.IndexOf("---", firstPosition + 3, StringComparison.Ordinal);
+        if (secondPosition < 0)
+            throw new Exception("Unable to find header in the file");
 
-        text = matches[0].Groups[1].Value.Trim();
-        return text;
+        var result = text.Substring(firstPosition + 3, secondPosition - firstPosition);
+        
+        return result.Trim();
     }
                 
     private async Task<HugoCheckerConfig> ReadCheckerConfig(string hugoFolder)
