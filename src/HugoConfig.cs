@@ -23,7 +23,13 @@ namespace HugoChecker;
 
 public class HugoConfig
 {
-    public string Title { get; set; } = string.Empty;
+    public HugoConfig(string languageCode, string title)
+    {
+        LanguageCode = languageCode;
+        Title = title;
+    }
+    
+    public string Title { get; set; }
 
-    public string LanguageCode { get; set; } = "en";
+    public string LanguageCode { get; set; }
 }

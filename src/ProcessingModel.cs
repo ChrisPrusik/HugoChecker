@@ -25,15 +25,15 @@ namespace HugoChecker;
 
 public class ProcessingModel
 {
-    public ProcessingModel(string hugoFolder, HugoConfig hugoConfig)
+    public ProcessingModel(string hugoFolder, HugoConfig config)
     {
         HugoFolder = hugoFolder;
-        HugoConfig = hugoConfig;
+        Config = config;
     }
     
     public string HugoFolder { get; }
     
-    public HugoConfig HugoConfig { get; }
+    public HugoConfig Config { get; }
 
     /// <summary>
     ///   Folders to check. Each folder contains hugo-checker.yaml config file.

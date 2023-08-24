@@ -20,21 +20,22 @@
 // SOFTWARE.
 
 using System.IO;
+using Markdig.Syntax;
 using YamlDotNet.RepresentationModel;
 
 namespace HugoChecker;
 
 public class FileLanguageModel
 {
-    public FileLanguageModel(string language, string filePath)
+    public FileLanguageModel(string language, string fullFilePath)
     {
         Language = language;
-        FilePath = filePath;
+        FullFilePath = fullFilePath;
     }
     
     public string Language { get; set; }
 
-    public string FilePath { get; set; }
+    public string FullFilePath { get; set; }
     
     public FileInfo? FileInfo { get; set;}
 
@@ -43,4 +44,6 @@ public class FileLanguageModel
     public YamlMappingNode? Yaml { get; set; }
 
     public string? Body { get; set; }
+    
+    public MarkdownDocument MarkDown { get; set; }
 }

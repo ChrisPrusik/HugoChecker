@@ -25,17 +25,35 @@ namespace HugoChecker;
 
 public class FolderModel
 {
-    public FolderModel(string subFolder, HugoCheckerConfig config)
+    public FolderModel(string fullFolderPath, HugoCheckerConfig config)
     {
-        SubFolder = subFolder;
-        CheckerConfig = config;
+        FullFolderPath = fullFolderPath;
+        Config = config;
     }
 
-    public string SubFolder { get; } 
+    /// <summary>
+    ///     Full folder path to the folder to check.
+    /// </summary>
+    public string FullFolderPath { get; } 
     
-    public HugoCheckerConfig CheckerConfig { get; }
+    /// <summary>
+    ///     Config for this folder read from hugo-checker.yaml file.
+    /// </summary>
+    public HugoCheckerConfig Config { get; }
 
+    /// <summary>
+    ///     All files in this folder.
+    ///         key: full file path to the default file, example c:\wwwroot\content\post\post1.md
+    ///         value: file model containing all files with the same name but different language.
+    /// </summary>
     public Dictionary<string, FileModel> Files { get; set; } = new();
-    
+
+    /// <summary>
+    ///     All files in this folder that are duplicates of other files.
+    ///     key: key in header that is duplicated, example title
+    ///         value:
+    ///             key: value of the key in header that is duplicated, example post1
+    ///             value: full path to the file that is duplicated, example c:\wwwroot\content\post\post1.md
+    /// </summary>
     public Dictionary<string, Dictionary<string, string>> ProcessedDuplicates { get; set; } = new();
 }

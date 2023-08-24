@@ -42,6 +42,8 @@ public class HugoCheckerConfig
         }
     };
 
+    public bool CheckLanguageStructure { get; set; } = true;
+    
     public bool CheckFileLanguage { get; set; } = true;
 
     public List<string> IgnoreFiles { get; set; } = new() { "Unused.md" };

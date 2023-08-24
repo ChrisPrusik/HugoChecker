@@ -25,7 +25,12 @@ namespace HugoChecker;
 
 public class FileModel
 {
-    public string RootFilePath { get; set; } = string.Empty;
+    public FileModel(string rootFilePath)
+    {
+        RootFilePath = rootFilePath;
+    }
+
+    public string RootFilePath { get; set; }
 
     public Dictionary<string, FileLanguageModel> LanguageFiles { get; set; } = new();
 }
