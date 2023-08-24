@@ -30,8 +30,6 @@ public class HugoCheckerConfig
 
     public List<string> Languages { get; set; } = new() { "en" };
 
-    public List<string> FoldersToCheck { get; set; } = new() { "content" };
-
     public List<string> RequiredHeaders { get; set; } = new() { "title", "date" };
 
     public Dictionary<string, Dictionary<string, List<string>>> RequiredLists { get; set; } = new()

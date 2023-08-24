@@ -25,7 +25,17 @@ namespace HugoChecker;
 
 public class FolderModel
 {
-    public string SubFolder { get; set; } = string.Empty;
+    public FolderModel(string subFolder, HugoCheckerConfig config)
+    {
+        SubFolder = subFolder;
+        CheckerConfig = config;
+    }
+
+    public string SubFolder { get; } 
+    
+    public HugoCheckerConfig CheckerConfig { get; }
 
     public Dictionary<string, FileModel> Files { get; set; } = new();
+    
+    public Dictionary<string, Dictionary<string, string>> ProcessedDuplicates { get; set; } = new();
 }

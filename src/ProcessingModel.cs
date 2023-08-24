@@ -25,20 +25,20 @@ namespace HugoChecker;
 
 public class ProcessingModel
 {
-    public ProcessingModel(string hugoFolder, HugoCheckerConfig checkerConfig, HugoConfig hugoConfig)
+    public ProcessingModel(string hugoFolder, HugoConfig hugoConfig)
     {
         HugoFolder = hugoFolder;
-        CheckerConfig = checkerConfig;
         HugoConfig = hugoConfig;
     }
     
-    public string HugoFolder { get; set; }
+    public string HugoFolder { get; }
     
-    public HugoCheckerConfig CheckerConfig { get; set; }
-    
-    public HugoConfig HugoConfig { get; set; }
+    public HugoConfig HugoConfig { get; }
 
-    public Dictionary<string, FolderModel> CheckedFolders { get; set; } = new();
-    
-    public Dictionary<string, Dictionary<string, string>> ProcessedDuplicates { get; set; } = new();
+    /// <summary>
+    ///   Folders to check. Each folder contains hugo-checker.yaml config file.
+    ///   key: full folder name
+    ///   value: folder model
+    /// </summary>
+    public Dictionary<string, FolderModel> Folders { get; set; } = new();
 }

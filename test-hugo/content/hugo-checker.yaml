@@ -4,12 +4,9 @@ default-language: en
 languages:
   - pl
   - en
-folders-to-check:
-  - content
-  - content/blog
 ignore-files:
-  - content/undone.md
-  - content/undone.pl.md
+  - undone.md
+  - undone.pl.md
 required-headers:
   - slug
   - title
