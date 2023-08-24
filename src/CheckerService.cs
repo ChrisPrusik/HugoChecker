@@ -394,11 +394,11 @@ public class CheckerService : ICheckerService
     {
         int firstPosition = text.IndexOf("---", StringComparison.Ordinal);
         if (firstPosition < 0)
-            throw new Exception("Unable to find header in the file");
+            throw new Exception($"Starting string '--' not found for header in text {text}");
         
         int secondPosition = text.IndexOf("---", firstPosition + 3, StringComparison.Ordinal);
         if (secondPosition < 0)
-            throw new Exception("Unable to find header in the file");
+            throw new Exception($"Ending string '--' not found for header in text: {text}");
 
         var result = text.Substring(firstPosition + 3, secondPosition - firstPosition);
         
