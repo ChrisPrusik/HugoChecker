@@ -7,4 +7,4 @@ runs:
       id: sample
       with:
         hugo-folder: ${{ github.workspace }}/test-hugo
-        chatgpt-api-key: ${{ secrets.CHATGPT_API_KEY }}
+        chatgpt-api-key: ${{ CHATGPT_API_KEY }}
