@@ -4,10 +4,6 @@ title: Terms and condition
 description: Terms and condition
 date: 2019-02-28
 author: Chris Prusik
-series:
-  - Other
-categories:
-  - Information
 ---
 
 # Terms and Conditions

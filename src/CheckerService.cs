@@ -29,6 +29,7 @@ using System.Threading.Tasks;
 using DotnetActionsToolkit;
 using LanguageDetection;
 using Markdig;
+using Markdig.Syntax;
 
 namespace HugoChecker;
 
@@ -66,9 +67,7 @@ public class CheckerService : ICheckerService
         var model = new ProcessingModel(folder, await ReadHugoConfig(folder));
 
         await ReadAllFiles(model);
-
         CheckFileNames(model, model.Config.LanguageCode);
-
         await CheckAllFilesContent(model);
 
         FinishInformation();
@@ -199,8 +198,17 @@ public class CheckerService : ICheckerService
 
     private void CheckMarkDown(FolderModel model, FileLanguageModel languageModel)
     {
+        var blocks = languageModel.MarkDown
+            .Select(x => x)
+            .Count(x => x is not null);
+        var titles = languageModel.MarkDown
+            .Select(x => x as HeadingBlock)
+            .Count(x => x is not null);
+        core.Info($"File '{languageModel.FullFilePath}' has {titles} titles, {blocks} blocks, {languageModel.MarkDown.LineCount} lines.");
+        if (blocks == 0)
+            throw new Exception($"File '{languageModel.FullFilePath}' has no blocks.");
     }
-
+    
     private void CheckHeaderDuplicates(FolderModel model, FileLanguageModel languageModel)
     {
         if (model.Config.CheckHeaderDuplicates is { Count: > 0 })

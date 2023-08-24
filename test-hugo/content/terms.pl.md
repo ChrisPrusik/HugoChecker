@@ -4,10 +4,6 @@ title: Regulamin strony
 description: Regulamin strony
 date: 2019-02-28
 author: Chris Prusik
-series:
-  - Inne
-categories:
-  - Informacja
 ---
 
 # Regulamin
