@@ -93,7 +93,7 @@ public class CheckerService : ICheckerService
 
     private async Task CheckAllFilesContent(ProcessingModel model)
     {
-        if (!(model.Folders is {Count: > 0}))
+        if (model.Folders is not {Count: > 0})
             throw new Exception($"There are no folders to check.");
         
         foreach (var pair in model.Folders) 
@@ -103,19 +103,49 @@ public class CheckerService : ICheckerService
     private async Task CheckFolderContent(FolderModel model)
     {
         core.Info($"Checking all files content in the folder '{model.FullFolderPath}'");
+        ShowFolderSummary(model);
 
         await InitializeChatGpt(model);
         
-        if (!(model.Files is {Count: > 0}))
+        if (model.Files is not {Count: > 0})
             throw new Exception($"There are no files to check in the folder '{model.FullFolderPath}'");
         
         foreach (var file in model.Files) 
             await CheckFileContent(model, file.Value);
     }
+    
+    private void ShowFolderSummary(FolderModel model)
+    {
+        core.Info($"Default language used in the folder '{model.Config.DefaultLanguage}'.");
+        core.Info($"All allowed languages '{ListToString(model.Config.Languages)}'.");
+        core.Info($"Ignored files: '{ListToString(model.Config.IgnoreFiles)}'.");
+        core.Info($"Required headers: '{ListToString(model.Config.RequiredHeaders)}'.");
+
+        var list = new List<string>();
+        if (model.Config.RequiredLists is not null) 
+            foreach(var section in model.Config.RequiredLists)
+                list.Add(section.Key);
+        
+        core.Info($"Required lists: '{ListToString(list)}' in languages '{ListToString(model.Config.Languages)}'.");
+        core.Info($"Check header duplicates: '{ListToString(model.Config.CheckHeaderDuplicates)}'.");
+        core.Info($"Check language structure: {model.Config.CheckLanguageStructure}");
+        core.Info($"Check file language: {model.Config.CheckFileLanguage}");
+        core.Info($"Check mark down: {model.Config.CheckMarkDown}");
+        core.Info($"Check slug regex: {model.Config.CheckSlugRegex}");
+        core.Info($"Pattern for slug regex: '{model.Config.PatternSlugRegex}'");
+        core.Info($"ChatGPT spell check: {model.Config.ChatGptSpellCheck}");
+        
+        if (model.Config.ChatGptSpellCheck is true)
+        {
+            core.Info($"ChatGPT model: '{model.Config.ChatGptModel}'");
+            core.Info($"ChatGPT temperature: {model.Config.ChatGptTemperature}");
+            core.Info($"ChatGPT max tokens: {model.Config.ChatGptMaxTokens}");
+        }
+    }
 
     private async Task CheckFileContent(FolderModel model, FileModel file)
     {
-        if (!(file.LanguageFiles is {Count: > 0}))
+        if (file.LanguageFiles is not {Count: > 0})
             throw new Exception($"There are no language files to check '{file.RootFilePath}'");
         
         foreach (var language in file.LanguageFiles)
@@ -148,6 +178,9 @@ public class CheckerService : ICheckerService
     {
         core.Info($"Checking file '{languageModel.FullFilePath}' language '{languageModel.Language}'");
 
+        if (model.Config.CheckMarkDown is true)
+            CheckMarkDown(model, languageModel);
+        
         if (model.Config.RequiredHeaders != null && model.Config.RequiredHeaders.Any())
             CheckRequiredHeaders(model, languageModel);
         
@@ -162,6 +195,10 @@ public class CheckerService : ICheckerService
         
         if (model.Config.CheckHeaderDuplicates != null && model.Config.CheckHeaderDuplicates.Any())
             CheckHeaderDuplicates(model, languageModel);
+    }
+
+    private void CheckMarkDown(FolderModel model, FileLanguageModel languageModel)
+    {
     }
 
     private void CheckHeaderDuplicates(FolderModel model, FileLanguageModel languageModel)

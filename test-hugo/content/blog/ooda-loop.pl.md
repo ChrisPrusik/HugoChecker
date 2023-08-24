@@ -5,7 +5,7 @@ description: Pętla OODA
 date: 2023-07-07
 author: Chris Prusik
 series:
-  - Inne
+  - Egzystencjalne pytanie
 categories:
   - Dla wszystkich
 draft: no

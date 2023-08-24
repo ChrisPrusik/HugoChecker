@@ -36,6 +36,8 @@ public class HugoCheckerConfig
 
     public bool? CheckLanguageStructure { get; set; }
     
+    public bool? CheckMarkDown { get; set; }
+    
     public bool? CheckFileLanguage { get; set; } 
 
     public List<string>? IgnoreFiles { get; set; } 
