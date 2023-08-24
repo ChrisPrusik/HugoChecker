@@ -3,8 +3,10 @@ runs:
   using: 'composite'
   steps:
     - name: Run Action
+      env:
+        chatgptapikey: ${{ secrets.CHATGPT_API_KEY }}
       uses: __CUSTOM_ACTION_REPO__@__GITHUB_SHA__
       id: sample
       with:
         hugo-folder: ${{ github.workspace }}/test-hugo
-        chatgpt-api-key: ${{ CHATGPT_API_KEY }}
+        chatgpt-api-key: ${{ secrets.CHATGPT_API_KEY }}
