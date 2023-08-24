@@ -17,11 +17,13 @@ jobs:
       run: ./build.ps1
       shell: pwsh
     - name: Prepare Testing Action
+      env:
+        CHATGPT_API_KEY: ${{ secrets.CHATGPT_API_KEY }}
       run: |
         (Get-Content -Path ./.github/workflows/testing-action/action.yml -Raw) `
             -replace '__CUSTOM_ACTION_REPO__',$env:GITHUB_REPOSITORY `
             -replace '__GITHUB_SHA__',$env:GITHUB_SHA `
-            -replace '__CHATGPT_API_KEY__',${{ secrets.CHATGPT_API_KEY }} `
+            -replace '__CHATGPT_API_KEY__',$env:CHATGPT_API_KEY `
         | Set-Content -Path ./.github/workflows/testing-action/action.yml
       shell: pwsh
     - name: Run Action
