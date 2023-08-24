@@ -130,7 +130,7 @@ public class CheckerService : ICheckerService
     {
         var relativePath = Path.GetRelativePath(model.HugoFolder, languageModel.FilePath);
         return model.CheckerConfig.IgnoreFiles.Any() && 
-               model.CheckerConfig.IgnoreFiles.Contains(relativePath);
+               model.CheckerConfig.IgnoreFiles.Contains(relativePath.Replace('\\', '/'));
     }
 
     private async Task ReadLanguageFile(ProcessingModel model, FileLanguageModel languageModel)
