@@ -30,9 +30,9 @@ Arguments:
 
 > **NOTE:** 
 >
-> * The current version of the action operates only on yaml configurations.
+> * The current version of the action operates only on yaml configurations and markdown headers.
 > * Language code must be in two letter: en, pl etc.
-> * Feel free to send ***pull requests*** to this repo: [github.com/ChrisPrusik/HugoChecker](https://github.com/ChrisPrusik/HugoChecker)
+> * Feel free to send ***PULL REQUESTS*** to this repo: [github.com/ChrisPrusik/HugoChecker](https://github.com/ChrisPrusik/HugoChecker)
 > * Project website: [github.com/marketplace/actions/hugochecker](https://github.com/marketplace/actions/hugochecker)
 
 ## Root folder
