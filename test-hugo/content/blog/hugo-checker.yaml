@@ -43,7 +43,7 @@ pattern-slug-regex: ^[a-z0-9]+(?:-[a-z0-9]+)*$
 chat-gpt-spell-check: yes
 chat-gpt-prompt: >
   Your role is to check the text message provided by the user in the next messages.
-  You will have to tasks to done. And result of the task put in an answer as json, 
+  You will have two tasks to done. And result of the task put in an answer as json, 
   see example below:
   {
       "Language": "en",
@@ -70,5 +70,4 @@ chat-gpt-prompt: >
 chat-gpt-model: gpt-4
 chat-gpt-temperature: 0.5
 chat-gpt-max-tokens: 2000
-
 # gpt-4, gpt-3.5-turbo, gpt-4-32k
