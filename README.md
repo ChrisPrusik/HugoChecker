@@ -37,7 +37,7 @@ Arguments:
 
 ## Root folder
 
-The root folder should also contain hugo configuration file `config.yaml`. At least, two parameters should be described in that file:
+The root folder given as the input `hugo-folder` should also contain hugo the configuration file `config.yaml`. At least, two parameters should be described in that file:
 
 ```yaml
 languageCode: en
