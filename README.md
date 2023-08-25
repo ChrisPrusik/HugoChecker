@@ -92,7 +92,7 @@ pattern-slug-regex: ^[a-z0-9]+(?:-[a-z0-9]+)*$
 chat-gpt-spell-check: no
 chat-gpt-prompt: >
   Your role is to check the text message provided by the user in the next messages.
-  You will have to tasks to done. And result of the task put in an answer as json, 
+  You will have two tasks to done. And result of the task put in an answer as json, 
   see example below:
   {
       "Language": "en",
@@ -343,3 +343,8 @@ whereas:
 * `language` means detected language two letter code
 * `SpellCheck` should be `true` if everything fine, `false` otherwise.
 * `Comment` if the grammar correction indicated a mistake.
+
+
+### chat-gpt-model
+
+Model used by chat-gpt to build responses. For example: gpt-4, gpt-3.5-turbo, gpt-4-32k. More details [here](https://platform.openai.com/docs/guides/gpt).
