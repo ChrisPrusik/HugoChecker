@@ -348,3 +348,22 @@ whereas:
 ### chat-gpt-model
 
 Model used by chat-gpt to build responses. For example: gpt-4, gpt-3.5-turbo, gpt-4-32k. More details [here](https://platform.openai.com/docs/guides/gpt).
+
+## Command Line
+
+You can execute action from command line. 
+
+```bash
+HugoChecker hugo-folder [chatgpt-api-key]
+```
+
+Whereas:
+
+1. The input `hugo-folder` is the root folder of the Hugo project.
+2. The input `chatgpt-api-key` is used for spell check and grammar. It's unecessary if you don't need ChatGPT spell check.
+
+Three versions of the command line program are available in the `dist` folder.
+
+1. MacOS: osx-x64/HugoChecker
+2. linux-x64/HugoChecker
+3. win-x64/HugoChecker.exe
