@@ -44,8 +44,20 @@ try
 {
     var hugoFolder = config["HUGO_FOLDER"];
     if (args.Length > 0)
+    {
+        if (args[0] == "--help" || args[0] == "-h")
+        {
+            Console.WriteLine("Usage: hugochecker hugoFolder [chatgptApiKey]");
+            Console.WriteLine(("Whereas:"));
+            Console.WriteLine(("  hugoFolder - the root folder of the Hugo project"));
+            Console.WriteLine(("  chatgptApiKey - the API key for the ChatGPT service, optional"));
+            Console.WriteLine();
+            Console.WriteLine("More info: https://github.com/marketplace/actions/hugochecker");
+            return;
+        }
         hugoFolder = args[0];
-    
+    }
+
     await checkerService.Check(hugoFolder, config["CHATGPT_API_KEY"]);
 }
 catch (Exception ex)
