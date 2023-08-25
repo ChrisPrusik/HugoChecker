@@ -41,7 +41,7 @@ check-file-language: yes
 check-mark-down: yes
 check-slug-regex: yes
 pattern-slug-regex: ^[a-z0-9]+(?:-[a-z0-9]+)*$
-chat-gpt-spell-check: yes
+chat-gpt-spell-check: no
 chat-gpt-prompt: >
   Your role is to check the text message provided by the user in the next messages.
   You will have two tasks to done. And result of the task put in an answer as json, 
