@@ -17,7 +17,7 @@ Example usage:
 runs:
   steps:
     - name: Check out the Hugo *.md files
-      uses: HugoChecker
+      uses: ChrisPrusik/HugoChecker@v3
       with:
         hugo-folder: ${{ github.workspace }}
         chatgpt-api-key: ${{ secrets.CHATGPT_API_KEY }}
