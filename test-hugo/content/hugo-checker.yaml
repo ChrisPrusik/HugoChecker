@@ -1,4 +1,5 @@
 # HugoCHecker configuration file for this directory
+# See https://github.com/marketplace/actions/hugochecker
 
 default-language: en
 languages:

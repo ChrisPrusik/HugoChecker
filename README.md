@@ -32,8 +32,13 @@ Arguments:
 >
 > * The current version of the action operates only on yaml configurations.
 > * Language code must be in two letter: en, pl etc.
+<<<<<<< Updated upstream
 > 
 > * Feel free to send ***PULL REQUESTS*** to this repo.
+=======
+> * Feel free to send ***pull requests*** to this repo: [github.com/ChrisPrusik/HugoChecker](https://github.com/ChrisPrusik/HugoChecker)
+> * Project website: [github.com/marketplace/actions/hugochecker](https://github.com/marketplace/actions/hugochecker)
+>>>>>>> Stashed changes
 
 ## Root folder
 

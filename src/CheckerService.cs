@@ -1,5 +1,6 @@
 // This file is part of HugoChecker - A GitHub Action to check Hugo markdown files.
 // Copyright (c) Krzysztof Prusik and contributors
+// https://github.com/marketplace/actions/hugochecker
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
