@@ -97,7 +97,7 @@ chat-gpt-prompt: >
   see example below:
   {
       "Language": "en",
-      "SpellCheck": true
+      "SpellCheck": true,
       "Comment": "Everything is ok"
   }
   
@@ -318,7 +318,7 @@ chat-gpt-prompt: >
   see example below:
   {
       "Language": "en",
-      "SpellCheck": true
+      "SpellCheck": true,
       "Comment": "Everything is ok"
   }
   
@@ -348,7 +348,7 @@ You can freely change the prompt for better results according to your specific r
 ```json
   {
       "Language": "en",
-      "SpellCheck": true
+      "SpellCheck": true,
       "Comment": "Everything is ok"
   }
 ```
@@ -408,7 +408,7 @@ Hyperlinking
 email
 ```
 > **NOTE:**
-> *#* is a comment line and will be ignored.
+> *#* is a comment line and will be ignored. There are 4 words in the example above.
 
 ## Command Line
 
@@ -425,6 +425,6 @@ Whereas:
 
 Three versions of the command line program are available in the `dist` folder.
 
-1. MacOS: osx-x64/HugoChecker
-2. linux-x64/HugoChecker
-3. win-x64/HugoChecker.exe
+1. MacOS: `osx-x64/HugoChecker`
+2. Linux: `linux-x64/HugoChecker`
+3. Windows: `win-x64/HugoChecker.exe`
