@@ -32,7 +32,7 @@ public class ChatGptService : IChatGptService
 {
     private OpenAIAPI? openAiApi;
     
-    private Conversation? languageDetector;
+    private Conversation? conversation;
     
     public async Task Initialise(string? apiKey, string? prompt, 
         string? model = null, double? temperature = null, int? maxTokens = null)
@@ -65,22 +65,22 @@ public class ChatGptService : IChatGptService
             Temperature = temperature ?? 0.9,
             MaxTokens = maxTokens ?? 2000,
         };
-        languageDetector = openAiApi.Chat.CreateConversation(request);
-        languageDetector.AppendMessage(ChatMessageRole.User, prompt);
+        conversation = openAiApi.Chat.CreateConversation(request);
+        conversation.AppendMessage(ChatMessageRole.User, prompt);
 
-        if (languageDetector == null)
+        if (conversation == null)
             throw new Exception("Unable to create ChatGPT conversation");
     }               
 
     public async Task SpellCheck(string? text, string? expectedLanguage = null)
     {
-        if (languageDetector == null)
+        if (conversation == null)
             throw new Exception("ChatGPT is not available");
         
         if (string.IsNullOrWhiteSpace(text))
             throw new Exception("Text to detect language is empty");
 
-        languageDetector.AppendMessage(ChatMessageRole.User, text);
+        conversation.AppendMessage(ChatMessageRole.User, text);
         var response = await GetResponse();
         var result = JsonSerializer.Deserialize<ChatGptResult>(response);
         if (result == null)
@@ -100,12 +100,12 @@ public class ChatGptService : IChatGptService
 
     private async Task<string> GetResponse(int level = 4, int delay = 1000)
     {
-        if (languageDetector == null)
+        if (conversation == null)
             throw new NotImplementedException("languageDetector is not initialised");
 
         try
         {
-            return await languageDetector.GetResponseFromChatbotAsync();
+            return await conversation.GetResponseFromChatbotAsync();
         }
         catch (Exception ex)
         {
