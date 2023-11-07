@@ -301,29 +301,10 @@ If the option is enabled, check the article for correctness. Example:
 check-spelling: yes
 ```
 
-There are some built in dictionaries for the following languages:
-
-| Language     | Two letter | Culture | Dictionary | Affix file |
-|--------------|------------|---------|------------|------------|
-| Deutsch      | de         | de-DE   | de_DE.dic  | de_DE.aff  |
-| English (US) | en         | en-US   | en_US.dic  | en_US.aff  |
-| Español      | es         | es-ES   | es_ES.dic  | es_ES.aff  |
-| Français     | fr         | fr-FR   | fr_FR.dic  | fr_FR.aff  |
-| Italiano     | it         | it-IT   | it_IT.dic  | it_IT.aff  |
-| Polish       | pl         | pl-PL   | pl_PL.dic  | pl_PL.aff  |
-| Português    | pt         | pt-PT   | pt_PT.dic  | pt_PT.aff  |
-
-If you need more languages, you can add your dictionaries into main hugo directory. 
-
-Spell checking works with dictionaries and affix files coming from Open Office [Hunspell format](https://hunspell.github.io/).
-If you need more languages, you can download them from [this GitHub repository](https://github.com/titoBouzout/Dictionaries)
-and put them into destination directory to work with. These files are in UTF-8 format.
-
-Another way is to go to the website [softmaker.com](https://www.softmaker.com/en/download/dictionaries)
-and download dictionary you wish. A total of 85 language dictionaries are available.
-After downloading, change the file name extension `.sox` to `.zip` and open the file. You should see some files inside.
-Unpack `*.dic` and `*.aff` files to the destination directory, an that's all.
-You can use these files by `HugoChecker`.
+See also:
+1. [Built-in dictionaries for spell checking](#built-in-dictionaries-for-spell-checking)
+2. [Custom dictionaries for spell checking](#custom-dictionaries-for-spell-checking)
+3. [Ignore words for spell checking](#ignore-words-for-spell-checking)
 
 ### chat-gpt-spell-check
 
@@ -381,6 +362,53 @@ whereas:
 ### chat-gpt-model
 
 Model used by chat-gpt to build responses. For example: gpt-4, gpt-3.5-turbo, gpt-4-32k. More details [here](https://platform.openai.com/docs/guides/gpt).
+
+## Built-in dictionaries for spell checking
+
+There are some built in dictionaries for the following languages:
+
+| Language     | Two letter | Culture | Dictionary | Affix file |
+|--------------|------------|---------|------------|------------|
+| Deutsch      | de         | de-DE   | de_DE.dic  | de_DE.aff  |
+| English (US) | en         | en-US   | en_US.dic  | en_US.aff  |
+| Español      | es         | es-ES   | es_ES.dic  | es_ES.aff  |
+| Français     | fr         | fr-FR   | fr_FR.dic  | fr_FR.aff  |
+| Italiano     | it         | it-IT   | it_IT.dic  | it_IT.aff  |
+| Polish       | pl         | pl-PL   | pl_PL.dic  | pl_PL.aff  |
+| Português    | pt         | pt-PT   | pt_PT.dic  | pt_PT.aff  |
+
+## Custom dictionaries for spell checking
+
+If you need more languages (see [check-spelling](#check-spelling)), you can add your dictionaries into 
+the main hugo directory - [root folder](#root-folder).
+
+Spell checking works with dictionaries and affix files coming from Open Office [Hunspell format](https://hunspell.github.io/).
+If you need more languages, you can download them from [this GitHub repository](https://github.com/titoBouzout/Dictionaries)
+and put them into destination directory to work with. These files are in UTF-8 format.
+
+Another way is to go to the website [softmaker.com](https://www.softmaker.com/en/download/dictionaries)
+and download dictionary you wish. A total of 85 language dictionaries are available.
+After downloading, change the file name extension `.sox` to `.zip` and open the file. You should see some files inside.
+Unpack `*.dic` and `*.aff` files to the destination directory, an that's all.
+You can use these files by `HugoChecker`.
+
+## Ignore words for spell checking
+
+If you need to ignore some words (see [check-spelling](#check-spelling)), 
+you can add them into main hugo directory (see ([root folder](#root-folder)) 
+into file `ignore-spelling-words.txt`. Example:
+
+```
+# Ignore the words in the spelling dictionary
+# See https://github.com/marketplace/actions/hugochecker
+
+Arghul
+licensors
+Hyperlinking
+email
+```
+> **NOTE:**
+> *#* is a comment line and will be ignored.
 
 ## Command Line
 

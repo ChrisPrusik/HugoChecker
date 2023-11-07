@@ -74,11 +74,10 @@ public class CheckerService : ICheckerService
         var folder = GetHugoFolder(hugoFolder);
 
         spellCheckFactory.DictionaryDirectory = folder;
+        await LoadIgnoreSpellingWords(folder);
         
         var model = new ProcessingModel(folder, await ReadHugoConfig(folder));
         await ReadAllFiles(model);
-        
-        await LoadIgnoreSpellingWords(folder);
         
         CheckFileNames(model, model.Config.LanguageCode);
         await CheckAllFilesContent(model);
@@ -96,8 +95,16 @@ public class CheckerService : ICheckerService
         }
         
         core.Info($"Loading '{ingoreSpellingWordsFileName}' file from the folder '{folder}'");
-        var text = await File.ReadAllTextAsync(filePath);
-        ignoreSpellingWords = text.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+        List<string> lines = new();
+        using var reader = new StreamReader(filePath, Encoding.UTF8);
+        string? line;
+        while ((line = await reader.ReadLineAsync()) is not null)
+            if (string.IsNullOrWhiteSpace(line) is false && 
+                line.StartsWith("#") is false)
+                lines.Add(line);
+        
+        ignoreSpellingWords = lines.ToArray();
+        core.Info($"There are {ignoreSpellingWords.Length} words to ignore in the '{ingoreSpellingWordsFileName}' file");
     }
 
     private async Task InitializeChatGpt(FolderModel model)
