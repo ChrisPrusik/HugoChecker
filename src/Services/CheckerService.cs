@@ -115,8 +115,14 @@ public class CheckerService : ICheckerService
         if (string.IsNullOrWhiteSpace(chatGptApiKey))
             throw new Exception("Undefined chatgpt-api-key. ChatGPT is not available.");
 
+        var prompt = model.Config.ChatGptPrompt;
+        if (ignoreSpellingWords.Length > 0)
+        {
+            var words = string.Join(", ", ignoreSpellingWords);
+            prompt += $"Ignore words during spelling: {words}\n";
+        }
         await chatGptService.Initialise(chatGptApiKey, 
-            model.Config.ChatGptPrompt,
+            prompt,
             model.Config.ChatGptModel,
             model.Config.ChatGptTemperature,
             model.Config.ChatGptMaxTokens);
