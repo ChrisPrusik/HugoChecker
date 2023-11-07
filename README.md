@@ -87,6 +87,7 @@ check-header-duplicates:
 check-language-structure: yes
 check-file-language: yes
 check-mark-down: yes
+check-spelling: yes
 check-slug-regex: yes
 pattern-slug-regex: ^[a-z0-9]+(?:-[a-z0-9]+)*$
 chat-gpt-spell-check: no
@@ -291,6 +292,38 @@ Magic article.
 ```
 
 In this example, slug is compatible with the regex.
+
+### check-spelling
+
+If the option is enabled, check the article for correctness. Example:
+
+```yaml
+check-spelling: yes
+```
+
+There are some built in dictionaries for the following languages:
+
+| Language     | Two letter | Culture | Dictionary | Affix file |
+|--------------|------------|---------|------------|------------|
+| Deutsch      | de         | de-DE   | de_DE.dic  | de_DE.aff  |
+| English (US) | en         | en-US   | en_US.dic  | en_US.aff  |
+| Español      | es         | es-ES   | es_ES.dic  | es_ES.aff  |
+| Français     | fr         | fr-FR   | fr_FR.dic  | fr_FR.aff  |
+| Italiano     | it         | it-IT   | it_IT.dic  | it_IT.aff  |
+| Polish       | pl         | pl-PL   | pl_PL.dic  | pl_PL.aff  |
+| Português    | pt         | pt-PT   | pt_PT.dic  | pt_PT.aff  |
+
+If you need more languages, you can add your dictionaries into main hugo directory. 
+
+Spell checking works with dictionaries and affix files coming from Open Office [Hunspell format](https://hunspell.github.io/).
+If you need more languages, you can download them from [this GitHub repository](https://github.com/titoBouzout/Dictionaries)
+and put them into destination directory to work with. These files are in UTF-8 format.
+
+Another way is to go to the website [softmaker.com](https://www.softmaker.com/en/download/dictionaries)
+and download dictionary you wish. A total of 85 language dictionaries are available.
+After downloading, change the file name extension `.sox` to `.zip` and open the file. You should see some files inside.
+Unpack `*.dic` and `*.aff` files to the destination directory, an that's all.
+You can use these files by `HugoChecker`.
 
 ### chat-gpt-spell-check
 

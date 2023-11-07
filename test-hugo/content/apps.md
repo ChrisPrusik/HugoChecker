@@ -6,4 +6,4 @@ date: 2019-02-28
 author: Chris Prusik
 ---
 
-Mobile apps for people!
+Mobile apps for people! Arghul

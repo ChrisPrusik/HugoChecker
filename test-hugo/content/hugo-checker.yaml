@@ -21,6 +21,7 @@ check-header-duplicates:
 check-language-structure: yes
 check-file-language: yes
 check-mark-down: yes
+check-spelling: yes
 check-slug-regex: yes
 pattern-slug-regex: ^[a-z0-9]+(?:-[a-z0-9]+)*$
 chat-gpt-spell-check: no
