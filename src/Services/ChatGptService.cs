@@ -26,7 +26,7 @@ using System.Threading.Tasks;
 using OpenAI_API;
 using OpenAI_API.Chat;
 
-namespace HugoChecker;
+namespace HugoChecker.Services;
 
 public class ChatGptService : IChatGptService
 {

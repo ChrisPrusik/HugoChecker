@@ -20,17 +20,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Collections.Generic;
-using YamlDotNet.RepresentationModel;
 using System.Threading.Tasks;
 
-namespace HugoChecker;
+namespace HugoChecker.Interfaces;
 
-public interface IYamlService
+public interface ICheckerService
 {
-    YamlMappingNode GetYamlFromText(string text);
-    List<string> GetListValue(YamlMappingNode? mapping, string key);
-    string GetStringValue(YamlMappingNode? mapping, string key);
-    bool ContainsChild(YamlMappingNode? mapping, string key);
-    Task<HugoCheckerConfig> ReadFromFile(string filePath);
+    Task Check(string? hugoFolder = null, string? chatGptApiKey = null);
 }

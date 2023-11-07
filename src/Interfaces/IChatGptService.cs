@@ -22,7 +22,7 @@
 
 using System.Threading.Tasks;
 
-namespace HugoChecker;
+namespace HugoChecker.Interfaces;
 
 public interface IChatGptService
 {

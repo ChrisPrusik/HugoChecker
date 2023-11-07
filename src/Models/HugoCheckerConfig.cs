@@ -18,15 +18,46 @@
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.namespace HugoChecker;
+// SOFTWARE.
 
-namespace HugoChecker;
+using System;
+using System.Collections.Generic;
 
-public class ChatGptResult
+namespace HugoChecker.Models;
+
+public class HugoCheckerConfig
 {
-    public string Language { get; set; } = "en";
+    public string? DefaultLanguage { get; set; }
 
-    public bool SpellCheck { get; set; } = true;
+    public List<string>? Languages { get; set; }
 
-    public string Comment { get; set; } = string.Empty;
+    public List<string>? RequiredHeaders { get; set; }
+
+    public Dictionary<string, Dictionary<string, List<string>>>? RequiredLists { get; set; } 
+
+    public bool? CheckLanguageStructure { get; set; }
+    
+    public bool? CheckMarkDown { get; set; }
+    
+    public bool? CheckFileLanguage { get; set; } 
+
+    public List<string>? IgnoreFiles { get; set; } 
+
+    public List<string>? CheckHeaderDuplicates { get; set; }
+    
+    public bool? CheckSlugRegex { get; set; }
+    
+    public string? PatternSlugRegex { get; set; }
+    
+    public bool? CheckSpelling { get; set; }
+
+    public bool? ChatGptSpellCheck { get; set; }
+
+    public string? ChatGptPrompt { get; set; }
+    
+    public double? ChatGptTemperature { get; set; }
+    
+    public int? ChatGptMaxTokens { get; set; }
+    
+    public string? ChatGptModel { get; set; }
 }

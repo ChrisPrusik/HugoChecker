@@ -25,25 +25,33 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DotnetActionsToolkit;
 using LanguageDetection;
 using Markdig;
 using Markdig.Syntax;
+using SpellCheck;
+using SpellCheck.Dictionaries;
 
-namespace HugoChecker;
+namespace HugoChecker.Services;
 
 public class CheckerService : ICheckerService
 {
     private const string checkerConfigFileName = "hugo-checker.yaml";
     private const string hugoConfigFileName = "config.yaml";
+    private const string ingoreSpellingWordsFileName = "ignore-spelling-words.txt";
     
     private readonly Core core;
     private readonly IYamlService yamlService;
     private readonly IChatGptService chatGptService;
     
     private LanguageDetector languageDetector;
+    private SpellCheckFactory spellCheckFactory = new SpellCheckFactory();
+    private Dictionary<string, SpellChecker> spellCheckers = new Dictionary<string, SpellChecker>();
+   
+    private string[] ignoreSpellingWords;
     
     private string? chatGptApiKey;
 
@@ -65,13 +73,31 @@ public class CheckerService : ICheckerService
 
         var folder = GetHugoFolder(hugoFolder);
 
+        spellCheckFactory.DictionaryDirectory = folder;
+        
         var model = new ProcessingModel(folder, await ReadHugoConfig(folder));
-
         await ReadAllFiles(model);
+        
+        await LoadIgnoreSpellingWords(folder);
+        
         CheckFileNames(model, model.Config.LanguageCode);
         await CheckAllFilesContent(model);
 
         FinishInformation();
+    }
+
+    private async Task LoadIgnoreSpellingWords(string folder)
+    {
+        var filePath = Path.Combine(folder, ingoreSpellingWordsFileName);
+        if (File.Exists(filePath) is false)
+        {
+            core.Info($"File '{ingoreSpellingWordsFileName}' doesn't exist in the folder '{folder}'");
+            return;
+        }
+        
+        core.Info($"Loading '{ingoreSpellingWordsFileName}' file from the folder '{folder}'");
+        var text = await File.ReadAllTextAsync(filePath);
+        ignoreSpellingWords = text.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
     }
 
     private async Task InitializeChatGpt(FolderModel model)
@@ -131,6 +157,7 @@ public class CheckerService : ICheckerService
         core.Info($"Check language structure: {model.Config.CheckLanguageStructure}");
         core.Info($"Check file language: {model.Config.CheckFileLanguage}");
         core.Info($"Check mark down: {model.Config.CheckMarkDown}");
+        core.Info($"Check spelling: {model.Config.CheckSpelling}");
         core.Info($"Check slug regex: {model.Config.CheckSlugRegex}");
         core.Info($"Pattern for slug regex: '{model.Config.PatternSlugRegex}'");
         core.Info($"ChatGPT spell check: {model.Config.ChatGptSpellCheck}");
@@ -187,7 +214,9 @@ public class CheckerService : ICheckerService
         if (model.Config.RequiredLists != null && model.Config.RequiredLists.Any())
             CheckRequiredLists(model, languageModel);
         
-        if (model.Config.CheckFileLanguage is true || model.Config.ChatGptSpellCheck is true)
+        if (model.Config.CheckFileLanguage is true || 
+            model.Config.CheckSpelling is true || 
+            model.Config.ChatGptSpellCheck is true)
             await CheckFileBody(model, languageModel);
         
         if (model.Config.CheckSlugRegex is true)
@@ -196,6 +225,19 @@ public class CheckerService : ICheckerService
         if (model.Config.CheckHeaderDuplicates != null && model.Config.CheckHeaderDuplicates.Any())
             CheckHeaderDuplicates(model, languageModel);
     }
+    
+    private async Task CheckSpelling(string text, string language)
+    {
+        if (spellCheckers.ContainsKey(language) is false)
+            spellCheckers[language] = await FindSpellChecker(language);
+
+        spellCheckers[language].CheckText(text);
+    }
+
+    private async Task<SpellChecker> FindSpellChecker(string language) =>
+        spellCheckFactory.Contains(language)
+            ? await spellCheckFactory.CreateSpellChecker(language, ignoreSpellingWords)
+            : await spellCheckFactory.CreateSpellChecker(language.FindCulture(), ignoreSpellingWords);
 
     private void CheckMarkDown(FolderModel model, FileLanguageModel languageModel)
     {
@@ -245,13 +287,21 @@ public class CheckerService : ICheckerService
 
     private async Task CheckFileBody(FolderModel model, FileLanguageModel languageModel)
     {
-        if (model.Config.ChatGptSpellCheck is not true)
-        {
-            if (model.Config.CheckFileLanguage is true && !string.IsNullOrWhiteSpace(languageModel.Body))
-                CheckFileLanguageLocally(languageModel.Body, languageModel.Language);
+        if (string.IsNullOrWhiteSpace(languageModel.Body))
             return;
-        }
+        
+        if (model.Config.CheckFileLanguage is true)
+            CheckFileLanguageLocally(languageModel.Body, languageModel.Language);
 
+        if (model.Config.CheckSpelling is true)
+            await CheckSpelling(languageModel.Body, languageModel.Language);
+
+        if (model.Config.ChatGptSpellCheck is true)
+            await CheckChatGpt(model, languageModel);
+    }
+
+    private async Task CheckChatGpt(FolderModel model, FileLanguageModel languageModel)
+    {
         try
         {
             if (model.Config.CheckFileLanguage is true)
@@ -468,7 +518,7 @@ public class CheckerService : ICheckerService
         
         return result.Trim();
     }
-                
+
     private async Task<HugoCheckerConfig> ReadCheckerConfig(string fileName)
     {
         if (!File.Exists(fileName))
@@ -577,21 +627,12 @@ public class CheckerService : ICheckerService
         return language;
     }
 
-    private string ListToString(List<string>? list)
-    {
-        if (list is null)
-            return string.Empty;
+    private string ListToString(List<string>? list) => 
+        list is null ? string.Empty : string.Join(", ", list);
 
-        return string.Join(", ", list);
-    }
-
-    private void StartInformation()
-    {
+    private void StartInformation() => 
         core.Info($"HugoChecker version: {typeof(CheckerService).Assembly.GetName().Version}");
-    }
 
-    private void FinishInformation()
-    {
+    private void FinishInformation() => 
         core.Info("Well done!");
-    }
 }

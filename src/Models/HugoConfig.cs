@@ -1,6 +1,5 @@
 // This file is part of HugoChecker - A GitHub Action to check Hugo markdown files.
 // Copyright (c) Krzysztof Prusik and contributors
-// https://github.com/marketplace/actions/hugochecker
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -20,18 +19,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Collections.Generic;
+namespace HugoChecker.Models;
 
-namespace HugoChecker;
-
-public class FileModel
+public class HugoConfig
 {
-    public FileModel(string rootFilePath)
+    public HugoConfig(string languageCode, string title)
     {
-        RootFilePath = rootFilePath;
+        LanguageCode = languageCode;
+        Title = title;
     }
+    
+    public string Title { get; set; }
 
-    public string RootFilePath { get; set; }
-
-    public Dictionary<string, FileLanguageModel> LanguageFiles { get; set; } = new();
+    public string LanguageCode { get; set; }
 }

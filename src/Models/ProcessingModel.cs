@@ -20,31 +20,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.IO;
-using Markdig.Syntax;
-using YamlDotNet.RepresentationModel;
+using System.Collections.Generic;
 
-namespace HugoChecker;
+namespace HugoChecker.Models;
 
-public class FileLanguageModel
+public class ProcessingModel
 {
-    public FileLanguageModel(string language, string fullFilePath)
+    public ProcessingModel(string hugoFolder, HugoConfig config)
     {
-        Language = language;
-        FullFilePath = fullFilePath;
+        HugoFolder = hugoFolder;
+        Config = config;
     }
     
-    public string Language { get; set; }
-
-    public string FullFilePath { get; set; }
+    public string HugoFolder { get; }
     
-    public FileInfo? FileInfo { get; set;}
+    public HugoConfig Config { get; }
 
-    public string? Header { get; set; }
-
-    public YamlMappingNode? Yaml { get; set; }
-
-    public string? Body { get; set; }
+    /// <summary>
+    ///   Folders to check. Each folder contains hugo-checker.yaml config file.
+    ///   key: full folder name
+    ///   value: folder model
+    /// </summary>
+    public Dictionary<string, FolderModel> Folders { get; set; } = new();
     
-    public MarkdownDocument? MarkDown { get; set; }
+    public List<string> IgnoreSpellingWords { get; set; } = new();
 }

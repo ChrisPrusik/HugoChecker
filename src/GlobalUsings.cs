@@ -18,28 +18,9 @@
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+// SOFTWARE.namespace HugoChecker;
 
-using System.Collections.Generic;
-
-namespace HugoChecker;
-
-public class ProcessingModel
-{
-    public ProcessingModel(string hugoFolder, HugoConfig config)
-    {
-        HugoFolder = hugoFolder;
-        Config = config;
-    }
-    
-    public string HugoFolder { get; }
-    
-    public HugoConfig Config { get; }
-
-    /// <summary>
-    ///   Folders to check. Each folder contains hugo-checker.yaml config file.
-    ///   key: full folder name
-    ///   value: folder model
-    /// </summary>
-    public Dictionary<string, FolderModel> Folders { get; set; } = new();
-}
+global using HugoChecker.Interfaces;
+global using HugoChecker.Services;
+global using HugoChecker.Models;
+global using HugoChecker.Extensions;

@@ -22,7 +22,7 @@
 
 using System.Collections.Generic;
 
-namespace HugoChecker;
+namespace HugoChecker.Models;
 
 public class FolderModel
 {

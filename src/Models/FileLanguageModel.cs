@@ -20,42 +20,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System;
-using System.Collections.Generic;
+using System.IO;
+using Markdig.Syntax;
+using YamlDotNet.RepresentationModel;
 
-namespace HugoChecker;
+namespace HugoChecker.Models;
 
-public class HugoCheckerConfig
+public class FileLanguageModel
 {
-    public string? DefaultLanguage { get; set; }
-
-    public List<string>? Languages { get; set; }
-
-    public List<string>? RequiredHeaders { get; set; }
-
-    public Dictionary<string, Dictionary<string, List<string>>>? RequiredLists { get; set; } 
-
-    public bool? CheckLanguageStructure { get; set; }
+    public FileLanguageModel(string language, string fullFilePath)
+    {
+        Language = language;
+        FullFilePath = fullFilePath;
+    }
     
-    public bool? CheckMarkDown { get; set; }
-    
-    public bool? CheckFileLanguage { get; set; } 
+    public string Language { get; set; }
 
-    public List<string>? IgnoreFiles { get; set; } 
+    public string FullFilePath { get; set; }
+    
+    public FileInfo? FileInfo { get; set;}
 
-    public List<string>? CheckHeaderDuplicates { get; set; }
-    
-    public bool? CheckSlugRegex { get; set; }
-    
-    public string? PatternSlugRegex { get; set; }
+    public string? Header { get; set; }
 
-    public bool? ChatGptSpellCheck { get; set; }
+    public YamlMappingNode? Yaml { get; set; }
 
-    public string? ChatGptPrompt { get; set; }
+    public string? Body { get; set; }
     
-    public double? ChatGptTemperature { get; set; }
-    
-    public int? ChatGptMaxTokens { get; set; }
-    
-    public string? ChatGptModel { get; set; }
+    public MarkdownDocument? MarkDown { get; set; }
 }

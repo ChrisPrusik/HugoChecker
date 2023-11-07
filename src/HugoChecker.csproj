@@ -16,11 +16,13 @@
   <ItemGroup>
     <PackageReference Include="DotnetActionsToolkit" Version="1.0.11" />
     <PackageReference Include="LanguageDetection.Ai" Version="1.0.5" />
-    <PackageReference Include="Markdig" Version="0.32.0" />
+    <PackageReference Include="Markdig" Version="0.33.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="OpenAI" Version="1.7.2" />
+    <PackageReference Include="SpellCheck.Dictionaries" Version="1.2.0" />
+    <PackageReference Include="SpellCheck.Simple" Version="1.2.0" />
     <PackageReference Include="YamlDotNet" Version="13.1.1" />
   </ItemGroup>
 

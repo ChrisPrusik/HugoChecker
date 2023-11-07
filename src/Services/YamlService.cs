@@ -29,7 +29,7 @@ using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace HugoChecker;
+namespace HugoChecker.Services;
 
 public class YamlService : IYamlService
 {

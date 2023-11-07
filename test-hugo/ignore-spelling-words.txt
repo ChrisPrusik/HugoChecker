@@ -1,0 +1,7 @@
+# Ignore the words in the spelling dictionary
+# See https://github.com/marketplace/actions/hugochecker
+
+Arghul
+licensors
+Hyperlinking
+email
