@@ -11,5 +11,5 @@ inputs:
     description: API key for chatgpt
     default: 0
 runs:
-  using: 'node12'
+  using: 'node20'
   main: 'index.js'
