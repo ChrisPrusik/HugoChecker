@@ -49,7 +49,7 @@ chat-gpt-prompt: >
   see example below:
   {
       "Language": "en",
-      "SpellCheck": true
+      "SpellCheck": true,
       "Comment": "Everything is ok"
   }
   

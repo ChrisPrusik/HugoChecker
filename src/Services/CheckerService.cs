@@ -48,8 +48,8 @@ public class CheckerService : ICheckerService
     private readonly IChatGptService chatGptService;
     
     private LanguageDetector languageDetector;
-    private SpellCheckFactory spellCheckFactory = new SpellCheckFactory();
-    private Dictionary<string, SpellChecker> spellCheckers = new Dictionary<string, SpellChecker>();
+    private SpellCheckFactory spellCheckFactory = new();
+    private Dictionary<string, SpellChecker> spellCheckers = new();
    
     private string[] ignoreSpellingWords;
     
@@ -144,10 +144,13 @@ public class CheckerService : ICheckerService
         core.Info($"Checking all files content in the folder '{model.FullFolderPath}'");
         ShowFolderSummary(model);
 
+        if (model.Files is not { Count: > 0 })
+        {
+            core.Warning($"There are no files to check in the folder '{model.FullFolderPath}'");
+            return;
+        }
+
         await InitializeChatGpt(model);
-        
-        if (model.Files is not {Count: > 0})
-            throw new Exception($"There are no files to check in the folder '{model.FullFolderPath}'");
         
         foreach (var file in model.Files) 
             await CheckFileContent(model, file.Value);
@@ -333,7 +336,7 @@ public class CheckerService : ICheckerService
         var language = languageDetector.Detect(text);
         var culture = new CultureInfo(language);
         if (string.Compare(culture.TwoLetterISOLanguageName, expectedLanguage, StringComparison.OrdinalIgnoreCase) != 0)
-            throw new Exception($"Language '{language}' is not expected '{expectedLanguage}'");
+            throw new Exception($"Unexpected language '{language}'. File should be '{expectedLanguage}'");
     }
 
     private void CheckRequiredLists(FolderModel model, FileLanguageModel languageModel)
@@ -548,7 +551,7 @@ public class CheckerService : ICheckerService
         var result = new Dictionary<string, FolderModel>();
         var configFileNames = Directory.GetFiles(model.HugoFolder, 
             checkerConfigFileName, SearchOption.AllDirectories);
-        if (!configFileNames.Any())
+        if (configFileNames.Any() is false)
             throw new Exception($"'{checkerConfigFileName}' file doesn't exist in any subdirectory of {model.HugoFolder}");
         
         foreach (var fileName in configFileNames)
@@ -557,6 +560,9 @@ public class CheckerService : ICheckerService
             if (string.IsNullOrWhiteSpace(folder))
                 throw new Exception($"Folder for the file {fileName} doesn't exist");
 
+            if (IsFolderIgnored(model, fileName) is false)
+                continue;
+
             var folderModel = new FolderModel(folder, await ReadCheckerConfig(fileName));
             await ReadAllFilesFromFolder(folderModel);
             result.Add(folderModel.FullFolderPath, folderModel);
@@ -564,6 +570,10 @@ public class CheckerService : ICheckerService
 
         model.Folders = result;
     }
+
+    private bool IsFolderIgnored(ProcessingModel model, string folder) =>
+        folder.StartsWith(model.HugoFolder, StringComparison.OrdinalIgnoreCase) is true &&
+        folder.StartsWith(Path.Combine(model.HugoFolder, "public"), StringComparison.OrdinalIgnoreCase) is false;
 
     private async Task ReadAllFilesFromFolder(FolderModel folderModel)
     {
