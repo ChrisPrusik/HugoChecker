@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>HugoChecker</RootNamespace>
-    <LangVersion>11</LangVersion>
+    <LangVersion>default</LangVersion>
     <Nullable>enable</Nullable>
     <Company>ChrisPrusik</Company>
     <Authors>Chris Prusik and contributors</Authors>
@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotnetActionsToolkit" Version="1.0.11" />
+    <PackageReference Include="DotnetActionsToolkit" Version="1.1.5" />
     <PackageReference Include="LanguageDetection.Ai" Version="1.0.5" />
     <PackageReference Include="Markdig" Version="0.33.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="7.0.0" />
@@ -23,7 +23,7 @@
     <PackageReference Include="OpenAI" Version="1.7.2" />
     <PackageReference Include="SpellCheck.Dictionaries" Version="1.2.0" />
     <PackageReference Include="SpellCheck.Simple" Version="1.2.0" />
-    <PackageReference Include="YamlDotNet" Version="13.1.1" />
+    <PackageReference Include="YamlDotNet" Version="13.7.1" />
   </ItemGroup>
 
 
