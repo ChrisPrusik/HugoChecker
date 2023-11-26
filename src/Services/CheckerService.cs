@@ -482,7 +482,7 @@ public class CheckerService : ICheckerService
     private string GetHugoFolder(string? hugoFolder = null)
     {
         var inputHugoFolder = core.GetInput("hugo-folder", false);
-        hugoFolder = !string.IsNullOrWhiteSpace(inputHugoFolder) ? inputHugoFolder : hugoFolder; 
+        hugoFolder = string.IsNullOrWhiteSpace(inputHugoFolder) ? hugoFolder : inputHugoFolder; 
 
         if (string.IsNullOrWhiteSpace(hugoFolder))
             throw new Exception("Input: hugo-folder is required");
@@ -579,7 +579,7 @@ public class CheckerService : ICheckerService
     {
         var result = new Dictionary<string, FileModel>();
 
-        if (!Directory.Exists(folderModel.FullFolderPath))
+        if (Directory.Exists(folderModel.FullFolderPath) is false)
             throw new Exception($"Folder {folderModel.FullFolderPath} doesn't exist");
 
         core.Info($"Loading markdown file names from the folder '{folderModel.FullFolderPath}'");
@@ -625,7 +625,7 @@ public class CheckerService : ICheckerService
         var fileName = Path.GetFileNameWithoutExtension(filePath);
         fileName = Path.GetFileNameWithoutExtension(fileName);
         fileName += ".md";
-        if(!string.IsNullOrWhiteSpace(folder))
+        if (string.IsNullOrWhiteSpace(folder) is false)
             filePath = Path.Combine(folder, fileName);
 
         return filePath;
@@ -637,13 +637,8 @@ public class CheckerService : ICheckerService
         var items = fileName.Split('.');
         var language = items[^1];
         if (items.Length == 1)
-        {
-            if (model.Config.DefaultLanguage is null)
-                throw new Exception(
-                    $"Language code is not defined in '{hugoConfigFileName}' file, expected {ListToString(model.Config.Languages)}.");
-
-            language = model.Config.DefaultLanguage;
-        }
+            language = model.Config.DefaultLanguage ?? throw new Exception(
+                $"Language code is not defined in '{hugoConfigFileName}' file, expected {ListToString(model.Config.Languages)}.");
 
         IsLanguageValid(model, language);
 
