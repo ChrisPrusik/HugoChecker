@@ -60,7 +60,7 @@ required-headers:
   - slug
   - title
   - description
-  - author
+  - authors
   - date
 required-lists:
   series:
