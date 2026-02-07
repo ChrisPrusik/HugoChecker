@@ -585,9 +585,12 @@ public class CheckerService : ICheckerService
         core.Info($"Loading markdown file names from the folder '{folderModel.FullFolderPath}'");
 
         foreach (var filePath in Directory.GetFiles(folderModel.FullFolderPath, "*.md",
-                     SearchOption.TopDirectoryOnly))
+                     SearchOption.AllDirectories))
         {
             if (IsFileIgnored(folderModel, filePath))
+                continue;
+
+            if (IsFileInSubfolderWithConfig(folderModel.FullFolderPath, filePath))
                 continue;
 
             core.Info($"Reading markdown file '{filePath}'.");
@@ -608,9 +611,23 @@ public class CheckerService : ICheckerService
 
             result[rootFilePath].LanguageFiles[language] = fileLanguageModel;
         }
-        core.Info($"Markdown files count in the folder {folderModel.FullFolderPath}: {folderModel.Files.Count}");
+        core.Info($"Markdown files count in the folder {folderModel.FullFolderPath}: {result.Count}");
 
         folderModel.Files = result;
+    }
+
+    private bool IsFileInSubfolderWithConfig(string rootFolderPath, string filePath)
+    {
+        var directory = Path.GetDirectoryName(filePath);
+        while (directory != null && directory.Length > rootFolderPath.Length)
+        {
+            if (File.Exists(Path.Combine(directory, checkerConfigFileName)))
+                return true;
+            
+            directory = Path.GetDirectoryName(directory);
+        }
+
+        return false;
     }
 
     private string GetRootFilePath(FolderModel model, string filePath)
