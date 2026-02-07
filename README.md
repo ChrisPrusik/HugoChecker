@@ -124,7 +124,7 @@ chat-gpt-max-tokens: 2000
 
 ### default-language
 
-Default language for root files. For example ```default-language: en``` - means that the default language of the files is 'en'. ```file.md``` is in ```en``` language, and individual language files are ```file.pl.md```, ```file.de.md``` etc.
+Default language for root files. For example `default-language: en` - means that the default language of the files is 'en'. `file.md` is in `en` language, and individual language files are `file.pl.md`, `file.de.md` etc.
 
 ### languages
 

@@ -42,17 +42,17 @@ public class CheckerService : ICheckerService
     private const string checkerConfigFileName = "hugo-checker.yaml";
     private const string hugoConfigFileName = "config.yaml";
     private const string ingoreSpellingWordsFileName = "ignore-spelling-words.txt";
-    
+
     private readonly Core core;
     private readonly IYamlService yamlService;
     private readonly IChatGptService chatGptService;
-    
+
     private LanguageDetector languageDetector;
     private SpellCheckFactory spellCheckFactory = new();
     private Dictionary<string, SpellChecker> spellCheckers = new();
-   
+
     private string[] ignoreSpellingWords;
-    
+
     private string? chatGptApiKey;
 
     public CheckerService(Core core, IYamlService yamlService, IChatGptService chatGptService)
@@ -68,17 +68,17 @@ public class CheckerService : ICheckerService
     public async Task Check(string? hugoFolder = null, string? chatGptApiKey = null)
     {
         StartInformation();
-        
+
         this.chatGptApiKey = chatGptApiKey ?? core.GetInput("chatgpt-api-key", false);
 
         var folder = GetHugoFolder(hugoFolder);
 
         spellCheckFactory.DictionaryDirectory = folder;
         await LoadIgnoreSpellingWords(folder);
-        
+
         var model = new ProcessingModel(folder, await ReadHugoConfig(folder));
         await ReadAllFiles(model);
-        
+
         CheckFileNames(model, model.Config.LanguageCode);
         await CheckAllFilesContent(model);
 
@@ -93,16 +93,16 @@ public class CheckerService : ICheckerService
             core.Info($"File '{ingoreSpellingWordsFileName}' doesn't exist in the folder '{folder}'");
             return;
         }
-        
+
         core.Info($"Loading '{ingoreSpellingWordsFileName}' file from the folder '{folder}'");
         List<string> lines = new();
         using var reader = new StreamReader(filePath, Encoding.UTF8);
         string? line;
         while ((line = await reader.ReadLineAsync()) is not null)
-            if (string.IsNullOrWhiteSpace(line) is false && 
+            if (string.IsNullOrWhiteSpace(line) is false &&
                 line.StartsWith("#") is false)
                 lines.Add(line);
-        
+
         ignoreSpellingWords = lines.ToArray();
         core.Info($"There are {ignoreSpellingWords.Length} words to ignore in the '{ingoreSpellingWordsFileName}' file");
     }
@@ -121,7 +121,7 @@ public class CheckerService : ICheckerService
             var words = string.Join(", ", ignoreSpellingWords);
             prompt += $"Ignore words during spelling: {words}\n";
         }
-        await chatGptService.Initialise(chatGptApiKey, 
+        await chatGptService.Initialise(chatGptApiKey,
             prompt,
             model.Config.ChatGptModel,
             model.Config.ChatGptTemperature,
@@ -134,8 +134,8 @@ public class CheckerService : ICheckerService
     {
         if (model.Folders is not {Count: > 0})
             throw new Exception($"There are no folders to check.");
-        
-        foreach (var pair in model.Folders) 
+
+        foreach (var pair in model.Folders)
             await CheckFolderContent(pair.Value);
     }
 
@@ -151,11 +151,11 @@ public class CheckerService : ICheckerService
         }
 
         await InitializeChatGpt(model);
-        
-        foreach (var file in model.Files) 
+
+        foreach (var file in model.Files)
             await CheckFileContent(model, file.Value);
     }
-    
+
     private void ShowFolderSummary(FolderModel model)
     {
         core.Info($"Default language used in the folder '{model.Config.DefaultLanguage}'.");
@@ -164,10 +164,10 @@ public class CheckerService : ICheckerService
         core.Info($"Required headers: '{ListToString(model.Config.RequiredHeaders)}'.");
 
         var list = new List<string>();
-        if (model.Config.RequiredLists is not null) 
+        if (model.Config.RequiredLists is not null)
             foreach(var section in model.Config.RequiredLists)
                 list.Add(section.Key);
-        
+
         core.Info($"Required lists: '{ListToString(list)}' in languages '{ListToString(model.Config.Languages)}'.");
         core.Info($"Check header duplicates: '{ListToString(model.Config.CheckHeaderDuplicates)}'.");
         core.Info($"Check language structure: {model.Config.CheckLanguageStructure}");
@@ -177,7 +177,7 @@ public class CheckerService : ICheckerService
         core.Info($"Check slug regex: {model.Config.CheckSlugRegex}");
         core.Info($"Pattern for slug regex: '{model.Config.PatternSlugRegex}'");
         core.Info($"ChatGPT spell check: {model.Config.ChatGptSpellCheck}");
-        
+
         if (model.Config.ChatGptSpellCheck is true)
         {
             core.Info($"ChatGPT model: '{model.Config.ChatGptModel}'");
@@ -190,7 +190,7 @@ public class CheckerService : ICheckerService
     {
         if (file.LanguageFiles is not {Count: > 0})
             throw new Exception($"There are no language files to check '{file.RootFilePath}'");
-        
+
         foreach (var language in file.LanguageFiles)
             await CheckLanguageFile(model, language.Value);
     }
@@ -198,11 +198,11 @@ public class CheckerService : ICheckerService
     private bool IsFileIgnored(FolderModel model, string languageFullFilePath)
     {
         var fileName = Path.GetFileName(languageFullFilePath);
-        var ignored = model.Config.IgnoreFiles is {Count: > 0} && 
+        var ignored = model.Config.IgnoreFiles is {Count: > 0} &&
                (model.Config.IgnoreFiles.Contains(fileName));
         if (ignored)
             core.Warning($"Ignore file '{languageFullFilePath}'");
-        
+
         return ignored;
     }
 
@@ -212,7 +212,7 @@ public class CheckerService : ICheckerService
         languageModel.FileInfo = new FileInfo(languageModel.FullFilePath);
         languageModel.Header = GetFileHeaderAsText(text);
         languageModel.Yaml = yamlService.GetYamlFromText(languageModel.Header);
-        languageModel.Body = text.Substring(text.IndexOf(languageModel.Header, StringComparison.Ordinal) + 
+        languageModel.Body = text.Substring(text.IndexOf(languageModel.Header, StringComparison.Ordinal) +
                                             languageModel.Header.Length).Trim();
         languageModel.MarkDown = Markdown.Parse(languageModel.Body);
     }
@@ -223,25 +223,25 @@ public class CheckerService : ICheckerService
 
         if (model.Config.CheckMarkDown is true)
             CheckMarkDown(model, languageModel);
-        
+
         if (model.Config.RequiredHeaders != null && model.Config.RequiredHeaders.Any())
             CheckRequiredHeaders(model, languageModel);
-        
+
         if (model.Config.RequiredLists != null && model.Config.RequiredLists.Any())
             CheckRequiredLists(model, languageModel);
-        
-        if (model.Config.CheckFileLanguage is true || 
-            model.Config.CheckSpelling is true || 
+
+        if (model.Config.CheckFileLanguage is true ||
+            model.Config.CheckSpelling is true ||
             model.Config.ChatGptSpellCheck is true)
             await CheckFileBody(model, languageModel);
-        
+
         if (model.Config.CheckSlugRegex is true)
             CheckSlugRegex(model, languageModel);
-        
+
         if (model.Config.CheckHeaderDuplicates != null && model.Config.CheckHeaderDuplicates.Any())
             CheckHeaderDuplicates(model, languageModel);
     }
-    
+
     private async Task CheckSpelling(string text, string language)
     {
         if (spellCheckers.ContainsKey(language) is false)
@@ -267,7 +267,7 @@ public class CheckerService : ICheckerService
         if (blocks == 0)
             throw new Exception($"File '{languageModel.FullFilePath}' has no blocks.");
     }
-    
+
     private void CheckHeaderDuplicates(FolderModel model, FileLanguageModel languageModel)
     {
         if (model.Config.CheckHeaderDuplicates is { Count: > 0 })
@@ -275,14 +275,14 @@ public class CheckerService : ICheckerService
                 if (yamlService.ContainsChild(languageModel.Yaml, header))
                 {
                     var value = yamlService.GetStringValue(languageModel.Yaml, header);
-                    
-                    if (model.ProcessedDuplicates.ContainsKey(header) && 
+
+                    if (model.ProcessedDuplicates.ContainsKey(header) &&
                         model.ProcessedDuplicates[header].ContainsKey(value))
                         throw new Exception($"Detected duplicates {header}: '{value}' in two files '{model.ProcessedDuplicates[header][value]}' and '{languageModel.FullFilePath}'");
 
                     if (!model.ProcessedDuplicates.ContainsKey(header))
                         model.ProcessedDuplicates.Add(header, new Dictionary<string, string>());
-                    
+
                     model.ProcessedDuplicates[header][value] = languageModel.FullFilePath;
                 }
     }
@@ -305,7 +305,7 @@ public class CheckerService : ICheckerService
     {
         if (string.IsNullOrWhiteSpace(languageModel.Body))
             return;
-        
+
         if (model.Config.CheckFileLanguage is true)
             CheckFileLanguageLocally(languageModel.Body, languageModel.Language);
 
@@ -351,7 +351,7 @@ public class CheckerService : ICheckerService
         var list = yamlService.GetListValue(languageModel.Yaml, key);
         if (!list.Any())
             throw new Exception($"There are no required list '{key}' in the file {languageModel.FullFilePath}");
-        
+
         foreach(var item in list)
             CheckRequiredListItem(model, languageModel, key, item);
     }
@@ -388,7 +388,7 @@ public class CheckerService : ICheckerService
             var value = yamlService.GetStringValue(languageModel.Yaml, key);
             if (string.IsNullOrWhiteSpace(value))
                 throw new Exception($"There are no required header key '{key}' (value) in the file {languageModel.FullFilePath}");
-            
+
         }
     }
 
@@ -405,7 +405,7 @@ public class CheckerService : ICheckerService
 
         core.Info($"Folder {folder.FullFolderPath}");
         CheckLanguageStructure(folder, languageCode);
-        
+
         foreach (var file in folder.Files)
         {
             core.Info(
@@ -413,7 +413,7 @@ public class CheckerService : ICheckerService
 
             if (folder.Config.Languages is null)
                 throw new Exception($"Languages are not defined in the {checkerConfigFileName} file.");
-            
+
             if (folder.Config.CheckLanguageStructure is true)
                 foreach (var language in folder.Config.Languages)
                     if (!file.Value.LanguageFiles.ContainsKey(language))
@@ -425,10 +425,10 @@ public class CheckerService : ICheckerService
     {
         if (model.Config.CheckLanguageStructure is not true)
             return;
-        
+
         if (model.Config.Languages is null)
             throw new Exception($"Languages are not defined in the {checkerConfigFileName} file");
-        
+
         core.Info($"languageCode in the {hugoConfigFileName}: {languageCode}");
         IsLanguageValid(model, languageCode);
 
@@ -444,7 +444,7 @@ public class CheckerService : ICheckerService
             {
                 if (section.Value is null)
                     throw new Exception($"Undefined language in the list required.{section.Key}. Check required-lists key.");
-                
+
                 foreach (var language in model.Config.Languages)
                     if (!section.Value.ContainsKey(language))
                         throw new Exception(
@@ -482,7 +482,7 @@ public class CheckerService : ICheckerService
     private string GetHugoFolder(string? hugoFolder = null)
     {
         var inputHugoFolder = core.GetInput("hugo-folder", false);
-        hugoFolder = string.IsNullOrWhiteSpace(inputHugoFolder) ? hugoFolder : inputHugoFolder; 
+        hugoFolder = string.IsNullOrWhiteSpace(inputHugoFolder) ? hugoFolder : inputHugoFolder;
 
         if (string.IsNullOrWhiteSpace(hugoFolder))
             throw new Exception("Input: hugo-folder is required");
@@ -500,7 +500,7 @@ public class CheckerService : ICheckerService
     {
         if (string.IsNullOrWhiteSpace(hugoFolder))
             throw new Exception("Hugo folder is required");
-        
+
         var hugoConfigFile = Path.Combine(hugoFolder, hugoConfigFileName);
 
         if (!File.Exists(hugoConfigFile))
@@ -525,13 +525,13 @@ public class CheckerService : ICheckerService
         int firstPosition = text.IndexOf("---", StringComparison.Ordinal);
         if (firstPosition < 0)
             throw new Exception($"Starting string '--' not found for header in text {text}");
-        
+
         int secondPosition = text.IndexOf("---", firstPosition + 3, StringComparison.Ordinal);
         if (secondPosition < 0)
             throw new Exception($"Ending string '--' not found for header in text: {text}");
 
         var result = text.Substring(firstPosition + 3, secondPosition - firstPosition);
-        
+
         return result.Trim();
     }
 
@@ -549,19 +549,16 @@ public class CheckerService : ICheckerService
     private async Task ReadAllFiles(ProcessingModel model)
     {
         var result = new Dictionary<string, FolderModel>();
-        var configFileNames = Directory.GetFiles(model.HugoFolder, 
+        var configFileNames = Directory.GetFiles(model.HugoFolder,
             checkerConfigFileName, SearchOption.AllDirectories);
         if (configFileNames.Any() is false)
             throw new Exception($"'{checkerConfigFileName}' file doesn't exist in any subdirectory of {model.HugoFolder}");
-        
+
         foreach (var fileName in configFileNames)
         {
             var folder = Path.GetDirectoryName(Path.GetFullPath(fileName));
             if (string.IsNullOrWhiteSpace(folder))
                 throw new Exception($"Folder for the file {fileName} doesn't exist");
-
-            if (IsFolderIgnored(model, fileName) is false)
-                continue;
 
             var folderModel = new FolderModel(folder, await ReadCheckerConfig(fileName));
             await ReadAllFilesFromFolder(folderModel);
@@ -598,7 +595,7 @@ public class CheckerService : ICheckerService
             var rootFilePath = GetRootFilePath(folderModel, filePath);
             if (!result.ContainsKey(rootFilePath))
                 result.Add(rootFilePath, new FileModel(rootFilePath));
-            
+
             var language = GetFileLanguage(folderModel, filePath);
 
             if (folderModel.Config.Languages is null || !folderModel.Config.Languages.Contains(language))
@@ -606,7 +603,7 @@ public class CheckerService : ICheckerService
                     $"Language code is not defined in {checkerConfigFileName} file, expected {ListToString(folderModel.Config.Languages)}.");
 
             var fileLanguageModel = new FileLanguageModel(language, filePath);
-            
+
             await ReadLanguageFileContent(fileLanguageModel);
 
             result[rootFilePath].LanguageFiles[language] = fileLanguageModel;
@@ -623,7 +620,7 @@ public class CheckerService : ICheckerService
         {
             if (File.Exists(Path.Combine(directory, checkerConfigFileName)))
                 return true;
-            
+
             directory = Path.GetDirectoryName(directory);
         }
 
@@ -662,12 +659,12 @@ public class CheckerService : ICheckerService
         return language;
     }
 
-    private string ListToString(List<string>? list) => 
+    private string ListToString(List<string>? list) =>
         list is null ? string.Empty : string.Join(", ", list);
 
-    private void StartInformation() => 
+    private void StartInformation() =>
         core.Info($"HugoChecker version: {typeof(CheckerService).Assembly.GetName().Version}");
 
-    private void FinishInformation() => 
+    private void FinishInformation() =>
         core.Info("Well done!");
 }
